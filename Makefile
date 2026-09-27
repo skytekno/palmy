@@ -13,6 +13,7 @@ web:
 	npm --prefix web run dev
 check:
 	node scripts/crypto-vectors.mjs --check
+	node scripts/lifecycle-check.mjs
 	node scripts/check-contract.mjs
 	cargo fmt --all -- --check
 	cargo clippy --locked --workspace --all-targets -- -D warnings

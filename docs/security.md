@@ -1,5 +1,7 @@
 # Privacy boundary and threat model
 
+The [credential-lifecycle proposal](credential-lifecycle.md) describes future rotation, enrollment and revocation guarantees and their review gates. The current runtime still uses [protocol v1](protocol.md).
+
 ## What the design protects
 
 Only user details are encrypted: initially display name and email. Clients encrypt before sending; the API has no profile decryption key. A database dump contains ciphertext and pseudonymous finance. A random recovery secret supplies independent encryption and authentication keys. The profile envelope uses AES-256-GCM, a fresh 96-bit nonce, a 128-bit tag and account-bound associated data. HKDF-SHA256 separates key purposes. Authentication uses Ed25519, never the encryption key. See [protocol.md](protocol.md), [RFC 5869](https://www.rfc-editor.org/rfc/rfc5869) and [RFC 8032](https://www.rfc-editor.org/rfc/rfc8032).

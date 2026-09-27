@@ -1,0 +1,50 @@
+{
+  "warning": "PUBLIC TEST MATERIAL ONLY. Not a valid lifecycle endpoint request. No HPKE envelope implementation is supplied.",
+  "proposal_version": "palmy-lifecycle/2-draft1",
+  "root_derivation": {
+    "recovery_secret": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+    "root_signing_seed": "VyTDP4cnw3D9rL1M0G3PPtkFEbrdO0o9_xp_43ae_4Q",
+    "root_signing_public_key": "3mWZvZRlu_FW9vKnPkrp6ygwFxNYKjQ_1RMxgvJxnUg",
+    "root_recipient_ikm": "5he0805pYrcvJjij4vGpjZWeKQs91CYf8S7Wvls9F2I",
+    "note": "recipient_ikm is input to RFC 9180 DeriveKeyPair; it is not a raw X25519 private scalar"
+  },
+  "proof": {
+    "purpose": "rotation_authorize",
+    "payload": {
+      "protocol": "2",
+      "account_id": "11111111-1111-4111-8111-111111111111",
+      "actor_kind": "root",
+      "actor_id": "root",
+      "operation_id": "22222222-2222-4222-8222-222222222222",
+      "challenge_id": "33333333-3333-4333-8333-333333333333",
+      "nonce": "REREREREREREREREREREREREREREREREREREREREREQ",
+      "expires_at": "2030-01-01T00:02:00Z",
+      "credential_revision": "7",
+      "profile_revision": "9",
+      "session_epoch": "3",
+      "payload_hash": "QF0EGTgoVuWkbFntT2fVjYbenOHJHtZQdIMFdgmi98k"
+    },
+    "canonical_payload": "{\"account_id\":\"11111111-1111-4111-8111-111111111111\",\"actor_id\":\"root\",\"actor_kind\":\"root\",\"challenge_id\":\"33333333-3333-4333-8333-333333333333\",\"credential_revision\":\"7\",\"expires_at\":\"2030-01-01T00:02:00Z\",\"nonce\":\"REREREREREREREREREREREREREREREREREREREREREQ\",\"operation_id\":\"22222222-2222-4222-8222-222222222222\",\"payload_hash\":\"QF0EGTgoVuWkbFntT2fVjYbenOHJHtZQdIMFdgmi98k\",\"profile_revision\":\"9\",\"protocol\":\"2\",\"session_epoch\":\"3\"}",
+    "transcript_hex": "70616c6d793a6c6966656379636c653a763200726f746174696f6e5f617574686f72697a650075dfe8e9a3233fd7226b45db55671ce82799e962409134e261b25f53c26bb022",
+    "signature": "3GIFGFYSsnrFyBwH9bzilHAF-Ot6LJRzAB63UbNZ0jD0NxMg6gkTp2_16BjlvBUk05vP9npl7oAFHtNXvnvRDg"
+  },
+  "profile": {
+    "key": "oKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr8",
+    "aad": {
+      "account_id": "11111111-1111-4111-8111-111111111111",
+      "key_generation": "2",
+      "profile_revision": "10",
+      "purpose": "palmy:profile:v2"
+    },
+    "canonical_aad": "{\"account_id\":\"11111111-1111-4111-8111-111111111111\",\"key_generation\":\"2\",\"profile_revision\":\"10\",\"purpose\":\"palmy:profile:v2\"}",
+    "plaintext": "{\"display_name\":\"Public lifecycle fixture\",\"email\":\"lifecycle@example.invalid\"}",
+    "envelope": {
+      "version": "2",
+      "algorithm": "A256GCM",
+      "key_generation": "2",
+      "profile_revision": "10",
+      "nonce": "EBESExQVFhcYGRob",
+      "ciphertext": "75QRZ6032dPjJgJw9FaejtECaa2DltDiNfJlSeS-EETHapuUpBhbAazxqu0Se1lI1LqeIw-X_w-LEaBHAULIwAPATTzjjVixkHaEK2X5XnfNzQx1dMCc2jU8EYuamBo"
+    }
+  }
+}

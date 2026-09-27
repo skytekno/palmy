@@ -1,10 +1,12 @@
 # Palmy identity and finance protocol v1
 
+Credential rotation and device enrollment are specified separately in the [MAN-115 lifecycle proposal](credential-lifecycle.md). That v2 design is not enabled by this v1 implementation.
+
 This is the implementation contract for the first slice. The `ai-analyze` package is the broader product design, not a list of implemented endpoints. Authentication and finance paths are relative to `/api/v1`; operational paths are absolute. JSON uses snake_case. Success responses wrap the payload in `{ "data": ... }`; lists put arrays in `data`. Failures are RFC 9457 problem JSON with `status`, `title`, `code`, and a server-generated `request_id`. All account responses are `Cache-Control: no-store`.
 
 ## Client identity
 
-Clients generate a random UUID v4 `account_id` and a cryptographically random 32-byte master secret. Recovery format is `palmy1.<lowercase UUID>.<unpadded base64url master secret>`. This is a full-access secret. Never send it, its derived secret keys, or unencrypted profile fields to the API. Never put it in a URL, log, analytics event, or browser persistent storage. Web keeps it and the session in memory until locked. Native apps may wrap it using platform secure storage with backups disabled.
+Clients generate a random UUID v4 `account_id` and a cryptographically random 32-byte master secret. Recovery format is `palmy1.<lowercase UUID>.<unpadded base64url master secret>`. This is a full-access secret. Never send it, its derived secret keys, or unencrypted profile fields to the API. Never put it in a URL, log, analytics event, or browser persistent storage. Web and native apps keep it and the session in memory until locked. Persistent native access remains gated on the reviewed device-credential and secure-storage design.
 
 Derive independent 32-byte keys using HKDF-SHA256, salt UTF-8 `palmy:v1`, info UTF-8 `palmy:profile:v1` (AES key) and `palmy:signing:v1` (Ed25519 seed). Ed25519 public keys are raw 32-byte unpadded base64url. Use standard libraries: Web Crypto HKDF/AES-GCM plus noble Ed25519; CryptoKit on iOS; JCA AES-GCM/HMAC with Bouncy Castle Ed25519 on Android. Protocol test vectors are shared in `contracts/crypto-vectors.json`.
 
