@@ -32,6 +32,8 @@ Create an account, save its recovery key, create a wallet, then record income or
 
 Native setup and build commands live in [`mobile/README.md`](mobile/README.md). Android emulator connects through `10.0.2.2:8100`; iOS simulator uses `127.0.0.1:8100`. HTTPS and production deployment are separate gates.
 
+The API defaults to production configuration: `CORS_ORIGINS` must list exact canonical HTTPS origins. The local Compose stack and `scripts/with-env.mjs` explicitly select development mode, which permits loopback origins only. See [web delivery controls](docs/web-delivery.md) for the production static server, TLS, CSP, origin configuration and remaining staging evidence.
+
 ## Verify
 
 ```sh
@@ -39,8 +41,11 @@ make check
 make integration  # requires local infrastructure and the API running
 npx playwright install chromium
 npm run test:browser  # also requires the web running at localhost:3100
+npx playwright install firefox
+make delivery-check  # isolated trusted HTTPS, CSP and privacy browser checks
+make backup-drill    # synthetic encrypted restore and failure cleanup
 ```
 
-See [validation evidence](docs/validation.md) for browser/native commands and actual outcomes. The [architecture](docs/architecture.md), [wire/crypto protocol](docs/protocol.md), [visual tokens](design/tokens.json), and [delivery map](docs/delivery.md) distinguish implemented behavior from the full product roadmap. The [Linear delivery plan](docs/linear-plan.md) links all 44 issues and eight milestones. The 154 operations in the original specification are not all implemented by this initial slice.
+See [validation evidence](docs/validation.md) for browser/native commands and actual outcomes. The [architecture](docs/architecture.md), [wire/crypto protocol](docs/protocol.md), [visual tokens](design/tokens.json), and [delivery map](docs/delivery.md) distinguish implemented behavior from the full product roadmap. The [initial Linear delivery plan](docs/linear-plan.md) links 44 issues and eight milestones; the [erasure refinements](docs/erasure-followups.json) add MAN-124–136. Linear holds current task status. The 154 operations in the original specification are not all implemented by this initial slice.
 
 `docker compose stop` stops only this project's containers and retains data. Do not delete the PostgreSQL volume when it contains records you want to keep.

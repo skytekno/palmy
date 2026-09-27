@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod config;
 pub mod db;
 pub mod error;
 pub mod finance;
@@ -138,6 +139,16 @@ async fn response_metadata(request: Request, next: Next) -> Response {
     response.headers_mut().insert(
         "x-content-type-options",
         HeaderValue::from_static("nosniff"),
+    );
+    response
+        .headers_mut()
+        .insert("referrer-policy", HeaderValue::from_static("no-referrer"));
+    response
+        .headers_mut()
+        .insert("x-frame-options", HeaderValue::from_static("DENY"));
+    response.headers_mut().insert(
+        "content-security-policy",
+        HeaderValue::from_static("default-src 'none'; frame-ancestors 'none'"),
     );
     tracing::info!(%request_id,status=response.status().as_u16(),elapsed_ms=started.elapsed().as_millis(),"request completed");
     response

@@ -2,6 +2,8 @@
 
 Executed locally on 27 September 2026. This record covers the new Palmy implementation, separately from the reference-application audit in `ai-analyze`.
 
+The first table records the baseline implementation and first delivery wave. The subsequent foundation-controls results supersede the affected counts and gates.
+
 | Check | Result | Evidence / command |
 |---|---|---|
 | Original source integrity | PASS | All 18 SHA256-listed input artifacts unchanged; original structural validator passed on a temporary copy (154 operations, 180 schemas, 62 tables, 163 audit rows). |
@@ -23,6 +25,23 @@ Executed locally on 27 September 2026. This record covers the new Palmy implemen
 | Android build / lint | PASS | Debug APK, unsigned Release APK, instrumentation APK and lint with AGP 9.1.1. **0 errors, 9 warnings**, all newer-version/target-SDK advisories; no blanket lint suppression. |
 | Credential lifecycle proposal | PASS, 25 reference cases | `node scripts/lifecycle-check.mjs`; deterministic proposal fixtures and reference state transitions. This is not runtime implementation, HPKE interoperability, PostgreSQL concurrency validation or independent cryptographic review. |
 | Final file review | PASS | Original inputs retained, generated secrets ignored, new text whitespace checked, generated API contract current, scoped independent API/web/native reviews completed. |
+
+## Foundation controls: MAN-117, MAN-120 and MAN-121
+
+Executed on 27 September 2026 against the branch based on merged `4132be9`. Runtime money, profile encryption and native application behavior are unchanged; production delivery configuration now fails closed.
+
+| Check | Result | Evidence / boundary |
+|---|---|---|
+| Complete API/web checks | PASS | `make check`: four remote-Docker preflight cases, existing crypto/25 lifecycle reference cases, generated OpenAPI parity, Rust fmt/Clippy, **12 Rust tests**, strict TypeScript, **63 web tests**, static export. |
+| OpenAPI metaschema | PASS | OpenAPI 3.1 validation; still 14 implemented operations. Erasure proposals are excluded from runtime OpenAPI. |
+| PostgreSQL and HTTP | PASS | `make integration` against rebuilt API container: database invariants plus **77 real HTTP assertions**, including exact-origin CORS and private-response headers. |
+| Real-API browser privacy | PASS | Chromium desktop/mobile flow with actual Rust/PostgreSQL and correlated API request IDs across two captured log files. Profile/recovery/token and financial-description canaries absent from logs, browser console, URLs, referrers and export files. |
+| Trusted HTTPS delivery | PASS | Actual production export in Firefox with a disposable trusted CA and synthetic API; untrusted CA rejected, CSP positive flow and negative execution/exfiltration/framing checks, release integrity, cache/header/Host/path boundaries and privacy scans. See [delivery evidence and limits](web-delivery.md). |
+| Encrypted backup and restore | PASS, 137 checks | Two isolated fresh PostgreSQL clusters; encryption tamper/wrong-key/truncation refusal, role/RLS/ledger/profile/auth reset and concurrent idempotency checks. Normal and deliberately failed runs clean up only owned resources. See [measured drill](backup-restore.md); production recovery objectives remain unproven. |
+| Erasure refinement | Reviewed proposal | 38 unique future cases, all mapped to 13 unestimated Backlog tasks MAN-124–136 with acyclic blocking links. These are not implemented or passing runtime erasure tests. Policy/specialist acceptance remains open. |
+| Source integrity | PASS | All 18 original `ai-analyze` checksums unchanged. |
+
+CI now runs the trusted HTTPS browser check and both backup success/failure exercises, in addition to the existing native jobs. Native implementation is unchanged in this wave; hosted results must be checked against the final candidate commit. Local TLS evidence does not substitute for a real staging hostname, API TLS gateway, edge telemetry configuration or independent security review.
 
 ## Scenarios exercised
 
@@ -61,6 +80,6 @@ Native commands and environment details are in [mobile/README.md](../mobile/READ
 
 ## Unrun and future gates
 
-The table records local evidence; hosted results must be checked against the candidate commit in GitHub PR checks. Hosted native tests explicitly skip live API cases when their API environment is absent; the local runs above supplied it. Firefox/Safari browser matrices, physical devices, complete native UI automation, screen-reader/large-text testing, release/store signing, production HTTPS/CSP, load benchmarking, backup/restore drills, independent cryptographic review, key rotation/device persistence and full account lifecycle remain gates. There is no claim of measured production performance, guaranteed anonymity, complete accessibility conformance or production readiness.
+The tables record local evidence; hosted results must be checked against the candidate commit in GitHub PR checks. Hosted native tests explicitly skip live API cases when their API environment is absent; the baseline local runs above supplied it. Firefox delivery is now exercised with a synthetic API; Safari and the broader cross-browser matrix remain open. Physical devices, complete native UI automation, screen-reader/large-text testing, release/store signing, staging/production TLS and edge configuration, load benchmarking, representative production recovery, independent cryptographic review, key rotation/device persistence and full account lifecycle remain gates. There is no claim of measured production performance, guaranteed anonymity, complete accessibility conformance or production readiness.
 
 The remaining product operations are designed in [delivery.md](delivery.md) and `ai-analyze`; their presence in those documents is not runtime implementation or passing-test evidence.
