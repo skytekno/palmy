@@ -39,7 +39,13 @@ jobs:
           node scripts/wait-ready.mjs http://127.0.0.1:8100/health/ready http://localhost:3100
           make integration
           npx playwright install --with-deps chromium
-          npm run test:browser
+          PALMY_TEST_LOGS=artifacts/local/api.log,artifacts/local/web.log npm run test:browser
+      - name: Trusted HTTPS delivery and browser privacy controls
+        run: |
+          npx playwright install --with-deps firefox
+          make delivery-check
+      - name: Isolated encrypted PostgreSQL restore and failure cleanup
+        run: make backup-drill
       - name: Container build
         run: docker compose build api
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

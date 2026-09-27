@@ -1,4 +1,4 @@
-.PHONY: setup infra migrate api web check integration stop
+.PHONY: setup infra migrate api web check integration backup-drill delivery-check stop
 setup:
 	node scripts/setup-local.mjs
 	npm ci
@@ -12,6 +12,7 @@ api:
 web:
 	npm --prefix web run dev
 check:
+	node scripts/backup-restore-preflight.mjs
 	node scripts/crypto-vectors.mjs --check
 	node scripts/lifecycle-check.mjs
 	node scripts/check-contract.mjs
@@ -24,5 +25,10 @@ check:
 integration:
 	node scripts/database-check.mjs
 	node scripts/with-env.mjs node scripts/integration.mjs
+backup-drill:
+	node scripts/backup-restore.mjs
+	node scripts/backup-restore-negative.mjs
+delivery-check:
+	npm --prefix web run test:delivery
 stop:
 	docker compose stop

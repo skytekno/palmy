@@ -1,0 +1,495 @@
+{
+  "parent_issue": "MAN-81",
+  "proposal_version": "palmy-erasure/1-draft1",
+  "status": "Published as proposed Backlog tasks MAN-124 through MAN-136; policy acceptance, assignment, estimates and implementation remain pending",
+  "common_gate": "Published Backlog children of MAN-81 with explicit blocking links to MAN-117. ER-F01 policy decisions unblock acceptance of MAN-117. Implementation children are blocked by accepted MAN-117 and by accepted/implemented MAN-115 foundations; ER-F03 also depends on MAN-116 common session fencing. They do not block completion of the design issue. No production retention periods are approved here.",
+  "tasks": [
+    {
+      "key": "ER-F01",
+      "title": "Accept erasure scope, retention matrix and lost-key policy",
+      "kind": "decision",
+      "depends_on": [],
+      "blockers": [
+        "Identify accountable privacy/product and operational roles",
+        "Determine deployed jurisdiction/provider/contract review needs"
+      ],
+      "deliverables": [
+        "Record ER-D01-08 acceptance or requested changes without invented sign-off",
+        "Populate versioned retention/SLO parameters and per-category exceptions",
+        "Resolve current-v1 erasure adapter versus reviewed v2 migration path"
+      ],
+      "cases": [
+        "ER-07",
+        "ER-23",
+        "ER-24",
+        "ER-32",
+        "ER-37"
+      ],
+      "unblocks_issues": [
+        "MAN-117"
+      ],
+      "blocked_by_issues": [],
+      "linear": {
+        "id": "MAN-124",
+        "url": "https://linear.app/skyholding/issue/MAN-124/accept-erasure-scope-retention-matrix-and-lost-key-policy"
+      }
+    },
+    {
+      "key": "ER-F02",
+      "title": "Review erasure purpose bindings and status credential contract",
+      "kind": "protocol-contract",
+      "depends_on": [
+        "ER-F01"
+      ],
+      "blockers": [
+        "MAN-115 common proof and strict encoding design accepted",
+        "Independent cryptographic review of added purposes and receipt credential required before activation"
+      ],
+      "deliverables": [
+        "Exact request/error schemas and shared preview/confirm/status negative vectors",
+        "Document v1 migration/adapter behavior explicitly",
+        "Bind policy, inventory, receipt hash, root and operation; separate status-only credential audience"
+      ],
+      "cases": [
+        "ER-01",
+        "ER-02",
+        "ER-03",
+        "ER-04",
+        "ER-05",
+        "ER-06",
+        "ER-08",
+        "ER-33"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-125",
+        "url": "https://linear.app/skyholding/issue/MAN-125/review-erasure-purpose-bindings-and-status-credential-contract"
+      }
+    },
+    {
+      "key": "ER-F03",
+      "title": "Add disabled erasure state schema and least-privilege boundaries",
+      "kind": "schema",
+      "depends_on": [
+        "ER-F01",
+        "ER-F02"
+      ],
+      "blockers": [
+        "MAN-115 common account fence and all legacy route checks implemented",
+        "Current-v1 decision resolved"
+      ],
+      "deliverables": [
+        "Add preview/operation/work state with immutable hashes and bounded fields",
+        "Enforce owner RLS, unique operations and state transitions",
+        "Keep normal financial DELETE/UPDATE forbidden; test pooled-context and grant boundaries"
+      ],
+      "cases": [
+        "ER-13",
+        "ER-17",
+        "ER-20",
+        "ER-34"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115",
+        "MAN-116"
+      ],
+      "linear": {
+        "id": "MAN-126",
+        "url": "https://linear.app/skyholding/issue/MAN-126/add-disabled-erasure-state-schema-and-least-privilege-boundaries"
+      }
+    },
+    {
+      "key": "ER-F04",
+      "title": "Implement independent suppression intent persistence and reconciliation",
+      "kind": "durability",
+      "depends_on": [
+        "ER-F03"
+      ],
+      "blockers": [
+        "Independent durable registry storage/recovery ownership selected",
+        "ER-D05 retirement marker/key retention accepted"
+      ],
+      "deliverables": [
+        "Persist minimal write-ahead intent before closure can commit",
+        "Reconcile result through durable outbox and monitor continuity/lag",
+        "Quarantine unresolved intent; verify abort only from authoritative evidence",
+        "Inject crash/outage at every cross-store boundary"
+      ],
+      "cases": [
+        "ER-14",
+        "ER-15",
+        "ER-32"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-127",
+        "url": "https://linear.app/skyholding/issue/MAN-127/implement-independent-suppression-intent-persistence-and"
+      }
+    },
+    {
+      "key": "ER-F05",
+      "title": "Implement owner preview and atomic erasure confirmation API",
+      "kind": "api",
+      "depends_on": [
+        "ER-F02",
+        "ER-F03",
+        "ER-F04"
+      ],
+      "blockers": [
+        "All enabled-domain inventory/revision producers registered",
+        "Versioned retention configuration accepted"
+      ],
+      "deliverables": [
+        "Generate implemented OpenAPI from real routes and strict DTOs",
+        "Produce redacted preview and reject unknown inventory or stale revisions",
+        "Atomic account closure, auth invalidation, sealed tasks and 202 receipt",
+        "Dropped-reply retry and same-operation conflict tests"
+      ],
+      "cases": [
+        "ER-01",
+        "ER-02",
+        "ER-04",
+        "ER-05",
+        "ER-07",
+        "ER-08",
+        "ER-09",
+        "ER-10",
+        "ER-11",
+        "ER-12",
+        "ER-13",
+        "ER-16",
+        "ER-17"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-128",
+        "url": "https://linear.app/skyholding/issue/MAN-128/implement-owner-preview-and-atomic-erasure-confirmation-api"
+      }
+    },
+    {
+      "key": "ER-F06",
+      "title": "Implement status-only receipt API and metadata expiry",
+      "kind": "api",
+      "depends_on": [
+        "ER-F02",
+        "ER-F03",
+        "ER-F05"
+      ],
+      "blockers": [
+        "Receipt retention and minimal audit fields approved"
+      ],
+      "deliverables": [
+        "Digest-verified independent receipt credential with uniform errors and rate limits",
+        "Return separate closure/active-store/provider/backup evidence dimensions",
+        "Purge expired receipts and temporary owner mappings without dropping required suppression state",
+        "Scan errors/logs for synthetic sensitive markers"
+      ],
+      "cases": [
+        "ER-18",
+        "ER-33",
+        "ER-34",
+        "ER-35",
+        "ER-37",
+        "ER-38"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-129",
+        "url": "https://linear.app/skyholding/issue/MAN-129/implement-status-only-receipt-api-and-metadata-expiry"
+      }
+    },
+    {
+      "key": "ER-F07",
+      "title": "Purge the current personal DB/cache graph behind the closed fence",
+      "kind": "worker",
+      "depends_on": [
+        "ER-F03",
+        "ER-F04",
+        "ER-F05"
+      ],
+      "blockers": [
+        "Review narrow immutable-trigger exception and worker authorization",
+        "Accepted ledger retention decision ER-D02"
+      ],
+      "deliverables": [
+        "Delete eligible personal finance, profile, auth and full idempotency snapshots in dependency order",
+        "Purge all owner cache revisions and prevent late refills",
+        "Checkpoint/resume large-account batches and reconcile privileged absence",
+        "Preserve active other-owner exact balances and normal immutable journal behavior"
+      ],
+      "cases": [
+        "ER-19",
+        "ER-20",
+        "ER-21",
+        "ER-22",
+        "ER-23",
+        "ER-38"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-130",
+        "url": "https://linear.app/skyholding/issue/MAN-130/purge-the-current-personal-dbcache-graph-behind-the-closed-fence"
+      }
+    },
+    {
+      "key": "ER-F08",
+      "title": "Gate restore exposure on independent erasure suppression",
+      "kind": "operations-test",
+      "depends_on": [
+        "ER-F04",
+        "ER-F07"
+      ],
+      "blockers": [
+        "MAN-121 backup/restore drill available",
+        "Production backup/WAL/replica inventory and maxima accepted separately"
+      ],
+      "deliverables": [
+        "Restore a pre-erasure snapshot into isolated quarantine",
+        "Apply latest suppression plus unresolved-intent quarantine before API/worker/export exposure",
+        "Fail closed on stale/missing/tampered registry and verify auth/job/cache cleanup",
+        "Calculate backup horizon from every actual copy; alert overdue expiry"
+      ],
+      "cases": [
+        "ER-15",
+        "ER-29",
+        "ER-30",
+        "ER-31",
+        "ER-32",
+        "ER-38"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115",
+        "MAN-121"
+      ],
+      "linear": {
+        "id": "MAN-131",
+        "url": "https://linear.app/skyholding/issue/MAN-131/gate-restore-exposure-on-independent-erasure-suppression"
+      }
+    },
+    {
+      "key": "ER-F09",
+      "title": "Add accessible web erasure preview, confirmation and receipt flow",
+      "kind": "web-client",
+      "depends_on": [
+        "ER-F05",
+        "ER-F06"
+      ],
+      "blockers": [
+        "ER-D01/03/05 Indonesian UX wording approved",
+        "Browser receipt export decision reviewed"
+      ],
+      "deliverables": [
+        "Explicit scope/retention/irreversibility UI with fresh root proof",
+        "Saved receipt or explicit loss acknowledgement, unknown-outcome recovery and no automatic retry",
+        "Clear memory and reject stale callbacks; no URL or browser-persistent credentials",
+        "Browser accessibility, cross-owner and network interruption tests"
+      ],
+      "cases": [
+        "ER-05",
+        "ER-16",
+        "ER-18",
+        "ER-35",
+        "ER-36",
+        "ER-37",
+        "ER-38"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-132",
+        "url": "https://linear.app/skyholding/issue/MAN-132/add-accessible-web-erasure-preview-confirmation-and-receipt-flow"
+      }
+    },
+    {
+      "key": "ER-F10",
+      "title": "Add native Android erasure and status flow",
+      "kind": "android-client",
+      "depends_on": [
+        "ER-F05",
+        "ER-F06"
+      ],
+      "blockers": [
+        "Reviewed Android root-proof library and explicit receipt-save UX"
+      ],
+      "deliverables": [
+        "Native Indonesian scope preview, fresh confirmation and truthful progress",
+        "Memory-only secrets unless separate secure-storage design accepted",
+        "ViewModel delayed-response/process interruption tests and actual activity lifecycle coverage"
+      ],
+      "cases": [
+        "ER-05",
+        "ER-16",
+        "ER-18",
+        "ER-35",
+        "ER-36",
+        "ER-37",
+        "ER-38"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-133",
+        "url": "https://linear.app/skyholding/issue/MAN-133/add-native-android-erasure-and-status-flow"
+      }
+    },
+    {
+      "key": "ER-F11",
+      "title": "Add native iOS erasure and status flow",
+      "kind": "ios-client",
+      "depends_on": [
+        "ER-F05",
+        "ER-F06"
+      ],
+      "blockers": [
+        "Reviewed iOS root-proof library and explicit receipt-save UX"
+      ],
+      "deliverables": [
+        "SwiftUI Indonesian scope preview, fresh confirmation and truthful progress",
+        "Memory-only secrets unless separate secure-storage design accepted",
+        "AppModel delayed-response/process interruption tests and real simulator lifecycle coverage"
+      ],
+      "cases": [
+        "ER-05",
+        "ER-16",
+        "ER-18",
+        "ER-35",
+        "ER-36",
+        "ER-37",
+        "ER-38"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-134",
+        "url": "https://linear.app/skyholding/issue/MAN-134/add-native-ios-erasure-and-status-flow"
+      }
+    },
+    {
+      "key": "ER-F12",
+      "title": "Run independent erasure integration and operational acceptance",
+      "kind": "release-gate",
+      "depends_on": [
+        "ER-F07",
+        "ER-F08",
+        "ER-F09",
+        "ER-F10",
+        "ER-F11"
+      ],
+      "blockers": [
+        "Independent security/privacy and operational reviewers assigned",
+        "No unresolved policy or implementation blockers"
+      ],
+      "deliverables": [
+        "Execute actual two-connection races, worker failure injection, restore suppression and sensitive-log scans",
+        "Record each declarative case as passed/failed/not-applicable with evidence",
+        "Verify rollback leaves closures closed and receipt claims match inventories",
+        "Approve disabled-to-pilot activation separately from merged code"
+      ],
+      "cases": [
+        "ER-01",
+        "ER-02",
+        "ER-03",
+        "ER-04",
+        "ER-05",
+        "ER-06",
+        "ER-07",
+        "ER-08",
+        "ER-09",
+        "ER-10",
+        "ER-11",
+        "ER-12",
+        "ER-13",
+        "ER-14",
+        "ER-15",
+        "ER-16",
+        "ER-17",
+        "ER-18",
+        "ER-19",
+        "ER-20",
+        "ER-21",
+        "ER-22",
+        "ER-23",
+        "ER-29",
+        "ER-30",
+        "ER-31",
+        "ER-32",
+        "ER-33",
+        "ER-34",
+        "ER-35",
+        "ER-36",
+        "ER-37",
+        "ER-38"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-135",
+        "url": "https://linear.app/skyholding/issue/MAN-135/run-independent-erasure-integration-and-operational-acceptance"
+      }
+    },
+    {
+      "key": "ER-F13",
+      "title": "Refine erasure adapters before files, jobs, providers or households launch",
+      "kind": "future-capability-gate",
+      "depends_on": [
+        "ER-F01",
+        "ER-F03",
+        "ER-F07"
+      ],
+      "blockers": [
+        "Relevant domain schema/ownership/provider agreements designed",
+        "Each adapter has its own accepted retention/disclosure matrix"
+      ],
+      "deliverables": [
+        "Split object versions/quarantine/download revocation, queue/outbox delivery fencing, provider disconnect/deletion, and shared ownership into separate children",
+        "Register inventory/revision producers and cleanup adapters before enabling each domain",
+        "Do not mark nonexistent domains runtime-tested or infer erasure of independently held copies"
+      ],
+      "cases": [
+        "ER-12",
+        "ER-24",
+        "ER-25",
+        "ER-26",
+        "ER-27",
+        "ER-28",
+        "ER-31"
+      ],
+      "blocked_by_issues": [
+        "MAN-117",
+        "MAN-115"
+      ],
+      "linear": {
+        "id": "MAN-136",
+        "url": "https://linear.app/skyholding/issue/MAN-136/refine-erasure-adapters-before-files-jobs-providers-or-households"
+      }
+    }
+  ],
+  "related_issue": "MAN-117",
+  "proposed_linear_state": "Backlog",
+  "sizing": "Unestimated. Confirm capacity and refine implementation boundaries before assigning estimates."
+}

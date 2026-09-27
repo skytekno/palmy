@@ -1,4 +1,4 @@
-use palmy_api::{AppState, db, router};
+use palmy_api::{AppState, config, db, router};
 use sqlx::postgres::PgPoolOptions;
 use std::{env, time::Duration};
 
@@ -22,6 +22,15 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
     if mode != "serve" && mode != "migrate" {
         return Err("expected serve or migrate".into());
     }
+    // Validate delivery configuration before connecting to any dependencies.
+    let origins = if mode == "serve" {
+        config::cors_origins(
+            env::var("PALMY_ENV").ok().as_deref(),
+            env::var("CORS_ORIGINS").ok().as_deref(),
+        )?
+    } else {
+        Vec::new()
+    };
     let database_url = if mode == "migrate" {
         env::var("MIGRATION_DATABASE_URL").or_else(|_| env::var("DATABASE_URL"))?
     } else {
@@ -50,18 +59,6 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
             .get_connection_manager_with_config(cache_config),
     )
     .await??;
-    let origins = env::var("CORS_ORIGINS")
-        .unwrap_or_else(|_| "http://localhost:3100,http://127.0.0.1:3100".into())
-        .split(',')
-        .map(|origin| {
-            let origin = origin.trim();
-            if origin == "*" || (!origin.starts_with("http://") && !origin.starts_with("https://"))
-            {
-                return Err("invalid CORS origin".into());
-            }
-            origin.parse().map_err(|_| "invalid CORS origin".into())
-        })
-        .collect::<Result<Vec<_>, Box<dyn std::error::Error>>>()?;
     let bind = env::var("BIND_ADDR").unwrap_or_else(|_| "0.0.0.0:8100".into());
     let listener = tokio::net::TcpListener::bind(&bind).await?;
     tracing::info!("Palmy API listening");

@@ -51,6 +51,24 @@ async function login(who) {
  const body=await proof(who); return (await call('/api/v1/auth/sessions',{method:'POST',body})).data.access_token;
 }
 await call('/health/live'); await call('/health/ready');
+// CORS is a browser response allowlist, not authentication or a network firewall.
+for (const [origin, allowed] of [['http://localhost:3100',true],['http://localhost:3100.attacker.invalid',false],['https://attacker.invalid',false],['null',false]]) {
+ const response=await fetch(`${base}/api/v1/profile`,{method:'OPTIONS',headers:{Origin:origin,'Access-Control-Request-Method':'GET','Access-Control-Request-Headers':'authorization'}});
+ assert.equal(response.headers.get('access-control-allow-origin'),allowed?origin:null);
+ assert.equal(response.headers.get('access-control-allow-credentials'),null);
+ assert.match(response.headers.get('vary')??'',/origin/i);
+ checks++;
+}
+for (const path of ['/health/live','/api/v1/profile','/does-not-exist?private=synthetic-delivery-canary']) {
+ const response=await fetch(`${base}${path}`,{headers:{Origin:'http://localhost:3100'}});
+ assert.equal(response.headers.get('access-control-allow-origin'),'http://localhost:3100');
+ assert.equal(response.headers.get('cache-control'),'no-store');
+ assert.equal(response.headers.get('referrer-policy'),'no-referrer');
+ assert.equal(response.headers.get('x-frame-options'),'DENY');
+ assert.equal(response.headers.get('x-content-type-options'),'nosniff');
+ assert.equal(response.headers.get('content-security-policy'),"default-src 'none'; frame-ancestors 'none'");
+ checks++;
+}
 const openapi=await call('/openapi.json'); assert.match(openapi.openapi,/^3\.1\./); assert.ok(openapi.paths['/api/v1/accounts']);
 await call('/api/v1/profile',{status:401}); await call('/api/v1/wallets',{status:401}); await call('/api/v1/summary',{token:b64(randomBytes(32)),status:401});
 const a=identity(), b=identity(); const personal={display_name:'Synthetic Test Owner',email:'private-test@example.invalid'};
