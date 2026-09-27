@@ -1,0 +1,20 @@
+{
+  "openapi": "structural checks passed; not full metaschema validation",
+  "operations": 154,
+  "schemas": 180,
+  "resolved_references": 1809,
+  "database_tables": 62,
+  "sql": "structural checks passed; PostgreSQL execution not performed",
+  "erd": "table inventory matches DDL; renderer not executed",
+  "financial_specification_fixtures": "passed",
+  "coverage_rows": 163,
+  "coverage_statuses": {
+    "PASS": 90,
+    "INSPECTED": 41,
+    "BLOCKED": 16,
+    "FAIL": 6,
+    "NOT_RUN": 7,
+    "EXCLUDED": 3
+  },
+  "markdown_links_and_fences": "passed"
+}

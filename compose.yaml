@@ -1,0 +1,60 @@
+name: palmy
+services:
+  postgres:
+    image: postgres:18.6-bookworm
+    environment:
+      POSTGRES_DB: palmy
+      POSTGRES_USER: palmy_owner
+      POSTGRES_PASSWORD: ${PALMY_DB_OWNER_PASSWORD:?Run node scripts/setup-local.mjs}
+      PALMY_DB_RUNTIME_PASSWORD: ${PALMY_DB_RUNTIME_PASSWORD:?Run node scripts/setup-local.mjs}
+    ports: ["127.0.0.1:55432:5432"]
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - ./ops/init-db.sh:/docker-entrypoint-initdb.d/10-palmy.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U palmy_owner -d palmy"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  cache:
+    image: valkey/valkey:9.1.2-alpine
+    command: ["valkey-server", "--save", "", "--appendonly", "no", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction"]
+    ports: ["127.0.0.1:56379:6379"]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  migrate:
+    build:
+      context: .
+      dockerfile: ops/api.Dockerfile
+    command: ["migrate"]
+    environment:
+      MIGRATION_DATABASE_URL: postgres://palmy_owner:${PALMY_DB_OWNER_PASSWORD}@postgres:5432/palmy
+      DATABASE_URL: postgres://palmy_owner:${PALMY_DB_OWNER_PASSWORD}@postgres:5432/palmy
+      REDIS_URL: redis://cache:6379
+    depends_on:
+      postgres: {condition: service_healthy}
+  api:
+    build:
+      context: .
+      dockerfile: ops/api.Dockerfile
+    command: ["serve"]
+    environment:
+      DATABASE_URL: postgres://palmy_runtime:${PALMY_DB_RUNTIME_PASSWORD}@postgres:5432/palmy
+      REDIS_URL: redis://cache:6379
+      BIND_ADDR: 0.0.0.0:8100
+      CORS_ORIGINS: http://localhost:3100,http://127.0.0.1:3100
+      RUST_LOG: palmy_api=info
+    ports: ["127.0.0.1:8100:8100"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      cache: {condition: service_healthy}
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+volumes:
+  postgres-data:

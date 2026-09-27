@@ -1,0 +1,29 @@
+{
+  "warning": "PUBLIC TEST FIXTURE. NEVER USE THESE KEYS OR NONCE FOR REAL ACCOUNTS.",
+  "account_id": "11111111-1111-4111-8111-111111111111",
+  "master_secret": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+  "recovery_key": "palmy1.11111111-1111-4111-8111-111111111111.AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+  "profile_key": "8-904u8eQdCEc1NDeGB4NMHLtsjF-Uuq9Ds0hQHf-EA",
+  "signing_seed": "TYM02KPWIoKqRifTD4NcDQ62cuWzQm8jiNEdUoZwDM8",
+  "public_key": "kr11_VJUbZ2kY9ipdnNxVoMfmTi_vrKOdeX9sjGbtso",
+  "profile": {
+    "display_name": "Pengguna Uji",
+    "email": "uji@example.invalid"
+  },
+  "plaintext": "{\"display_name\":\"Pengguna Uji\",\"email\":\"uji@example.invalid\"}",
+  "aad": "palmy:profile:v1:11111111-1111-4111-8111-111111111111",
+  "envelope": {
+    "version": 1,
+    "algorithm": "A256GCM",
+    "nonce": "ICEiIyQlJicoKSor",
+    "ciphertext": "JqvPLRuXSzKIJ3oRy4juu0tjQkYaQxRVcDFq5s268Bwyx37q46z4bHXHjZhdTLnbnsS2v0EphahVvbUOB9aFY5_LnAkngRCC0oAR_84"
+  },
+  "registration_message": "palmy:register:v1:11111111-1111-4111-8111-111111111111:kr11_VJUbZ2kY9ipdnNxVoMfmTi_vrKOdeX9sjGbtso:ICEiIyQlJicoKSor:JqvPLRuXSzKIJ3oRy4juu0tjQkYaQxRVcDFq5s268Bwyx37q46z4bHXHjZhdTLnbnsS2v0EphahVvbUOB9aFY5_LnAkngRCC0oAR_84",
+  "registration_signature": "8s5wAJ2nBHUNCef65hOmeSowmTwTpNxXatevfnoYYWnQ79GK_S9zhtjQpvw9nXLEdH19K3aqF6x66tSyz1fRAA",
+  "challenge": {
+    "challenge_id": "22222222-2222-4222-8222-222222222222",
+    "nonce": "KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKio"
+  },
+  "authentication_message": "palmy:auth:v1:11111111-1111-4111-8111-111111111111:22222222-2222-4222-8222-222222222222:KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKio",
+  "authentication_signature": "z4Q7Tj1EDIii1yn5DqFkS54-lPirRUiB8_1qvP4a4Y0oqRmhGSmHi4BghZhOp2vnZaod0qbEkLfvNIdRY6QiDA"
+}

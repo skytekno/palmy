@@ -1,0 +1,29 @@
+{
+  "tool": "api-design-reviewer api_linter.py",
+  "input": "OpenAPI contract with standard shared parameter references expanded for this linter",
+  "summary": {
+    "total_endpoints": 154,
+    "endpoints_with_issues": 106,
+    "total_issues": 1080,
+    "errors": 0,
+    "warnings": 942,
+    "info": 138,
+    "score": 80.75
+  },
+  "issue_categories": {
+    "info:responses": 131,
+    "warning:naming": 939,
+    "info:rest_conventions": 7,
+    "warning:url_structure": 3
+  },
+  "review": [
+    "Snake_case is an intentional consistent contract convention.",
+    "Nested correction resources retain parent ownership context.",
+    "202 async,412 ETag conflict,422 validation and428 missing precondition are intentional.",
+    "Bodyless creation/desired-state commands have their inputs in authorized resource context."
+  ],
+  "not_performed": [
+    "Full OpenAPI metaschema validation",
+    "Live API integration"
+  ]
+}

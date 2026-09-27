@@ -1,0 +1,4 @@
+* text=auto eol=lf
+# Input specifications are evidence: keep their original bytes and checksums.
+ai-analyze/** -text
+ai-analyze/coverage.csv whitespace=cr-at-eol

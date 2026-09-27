@@ -1,0 +1,31 @@
+{
+  "proposal_version": "palmy-lifecycle/2-draft1",
+  "status": "Reference-model acceptance declarations, not implemented API behavior",
+  "cases": [
+    {"id":"LC-01","name":"Domain-separated root intent signature verifies"},
+    {"id":"LC-02","name":"Account, purpose, epoch and payload substitution fail signature verification"},
+    {"id":"LC-03","name":"Canonical serialization and decimal counter boundaries"},
+    {"id":"LC-04","name":"Profile generation and revision are authenticated by AES-GCM"},
+    {"id":"LC-05","name":"Write ordered before revocation may commit; subsequent write fails"},
+    {"id":"LC-06","name":"Revocation ordered first prevents stale-session write"},
+    {"id":"LC-07","name":"Pending old-epoch authentication challenge cannot mint a new session"},
+    {"id":"LC-08","name":"Revoke all sessions still permits fresh proof by surviving device"},
+    {"id":"LC-09","name":"Revoked device loses tokens and future sign-in"},
+    {"id":"LC-10","name":"Profile-capable device revocation fences profile writes and enrollment until rekey"},
+    {"id":"LC-11","name":"Bundled device revoke and profile rekey excludes revoked recipient"},
+    {"id":"LC-12","name":"Ordinary device cannot replace root or delegate management scopes"},
+    {"id":"LC-13","name":"Unverified pairing, pending device and invalid key acknowledgement cannot activate"},
+    {"id":"LC-14","name":"Revoking enrollment sponsor defeats pending activation"},
+    {"id":"LC-15","name":"Finance-only recipient gets no profile envelope or finance-write scope"},
+    {"id":"LC-16","name":"Concurrent activation enforces device limit at commit"},
+    {"id":"LC-17","name":"Unsaved candidate is rejected and preparation leaves active keys unchanged"},
+    {"id":"LC-18","name":"Profile change after rotation preparation produces conflict without lost update"},
+    {"id":"LC-19","name":"Rotation rejects extra recipients including formerly authorized devices"},
+    {"id":"LC-20","name":"Injected transaction failure leaves root, profile and roster entirely unchanged"},
+    {"id":"LC-21","name":"Rotation replaces root, profile, roster and session epoch together"},
+    {"id":"LC-22","name":"Lost reply resolves through receipt-only status without a second rotation"},
+    {"id":"LC-23","name":"Changed idempotency payload, expired proposal and aborted operation cannot commit"},
+    {"id":"LC-24","name":"Only one competing rotation can prepare and advance the old root"},
+    {"id":"LC-25","name":"Root can grant controller scopes without acquiring a bearer session or inventing scopes"}
+  ]
+}
