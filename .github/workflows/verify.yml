@@ -1,0 +1,76 @@
+name: Verify monorepo
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  api-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            web/package-lock.json
+      - name: Install pinned Rust
+        run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt clippy
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - run: make setup
+      - run: make check
+      - run: python -m pip install -r requirements-checks.txt && python scripts/check-openapi.py
+      - run: make infra migrate
+      - name: Real database, API, and browser tests
+        run: |
+          mkdir -p artifacts/local
+          node scripts/with-env.mjs target/debug/palmy-api serve > artifacts/local/api.log 2>&1 &
+          npm --prefix web start > artifacts/local/web.log 2>&1 &
+          node scripts/wait-ready.mjs http://127.0.0.1:8100/health/ready http://localhost:3100
+          make integration
+          npx playwright install --with-deps chromium
+          npm run test:browser
+      - name: Container build
+        run: docker compose build api
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: local-check-evidence
+          path: artifacts/local/
+          retention-days: 3
+      - run: docker compose down
+        if: always()
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Android JVM tests and debug APK
+        working-directory: mobile/android
+        run: ./gradlew --no-daemon testDebugUnitTest assembleDebug lintDebug
+  ios:
+    runs-on: macos-26
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Crypto and client unit tests
+        working-directory: mobile/ios
+        run: swift test
+      - name: iOS simulator build
+        run: xcodebuild -project mobile/ios/Palmy.xcodeproj -scheme Palmy -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build

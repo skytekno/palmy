@@ -1,0 +1,1289 @@
+{
+  "version": 1,
+  "linearDocument": {
+    "id": "3174601b-3ba2-47e1-a545-ca0b7f18ef97",
+    "url": "https://linear.app/skyholding/document/palmy-implementation-roadmap-and-release-gates-a418cf1888e8"
+  },
+  "publicationVerification": {
+    "verifiedAt": "2026-09-27",
+    "issues": 44,
+    "milestones": 8,
+    "blockingRelationships": 70,
+    "mismatches": []
+  },
+  "plannedAt": "2026-09-27",
+  "project": {
+    "id": "37015efa-0b65-4ccd-9d36-4c44ee43df23",
+    "identifier": "P-MAN-3",
+    "name": "Palmy",
+    "url": "https://linear.app/skyholding/project/palmy-e44a689b012b",
+    "teamId": "4a80ed6b-e889-4580-955f-9c5371cac00a",
+    "existingTargetDate": "2027-01-31"
+  },
+  "assumptions": [
+    "Owners and issue dates remain unset until capacity is confirmed; existing project lead/start/target dates preserved.",
+    "Capability epics are Backlog and require child-task refinement before sprint commitment. No speculative effort estimates.",
+    "The current first slice is local and uncommitted. Strict TypeScript is locally verified and In Review, not Done or shipped.",
+    "Berdua and descendants, Conversation Cards and Jurnal Keluarga are excluded. Restricted child roles are undecided. Automatic recurring posting is P2.",
+    "Identity is client-encrypted; readable finance and metadata can reidentify people. No promise of guaranteed anonymity."
+  ],
+  "milestones": [
+    {
+      "key": "M1",
+      "name": "01 · Secure foundation",
+      "description": "Integrate and review the locally validated personal-account slice; enforce strict TypeScript, contract parity, key lifecycle, native lifecycle tests and operational controls.",
+      "linearId": "50cf3956-6ec2-4751-b25f-db0946eeabaf"
+    },
+    {
+      "key": "M2",
+      "name": "02 · Household access",
+      "description": "Add pseudonymous household roles, intended-recipient invitations and verified client-encrypted sharing. Revocation must stop future server access.",
+      "linearId": "55e06bf6-07ca-4b45-9993-6ef8a07c7c15"
+    },
+    {
+      "key": "M3",
+      "name": "03 · Ledger and capture",
+      "description": "Complete exact-money wallets, transfers, corrections, splits and searchable history with immutable balanced journals.",
+      "linearId": "5aa52e88-e5bd-4713-aca2-9ea034002c25"
+    },
+    {
+      "key": "M4",
+      "name": "04 · Budgets, debts, goals and reports",
+      "description": "Deliver trustworthy planning and economic-purpose reports reconciled against the ledger.",
+      "linearId": "ba02b8e3-e510-40aa-ad2e-ea80ebf6ecc8"
+    },
+    {
+      "key": "M5",
+      "name": "05 · Household workflows and files",
+      "description": "Deliver private file/job infrastructure, reviewed recurring entries, groceries, calendar, maintenance, links and import/export.",
+      "linearId": "f62c40a4-09b2-4ea3-8d8f-55b6f5ca98cf"
+    },
+    {
+      "key": "M6",
+      "name": "06 · Investments and ecosystem",
+      "description": "Add investment accounting, allocation, calculators, insights, optional providers, affiliate and help/feedback.",
+      "linearId": "07427aa3-c9fd-4ce1-b79b-98f610f36723"
+    },
+    {
+      "key": "M7",
+      "name": "07 · Pilot and release",
+      "description": "Measure security, privacy, accessibility, performance, reliability and signed-distribution evidence before selecting a release.",
+      "linearId": "3e455f35-813a-43b7-947a-cd2e5986b96d"
+    },
+    {
+      "key": "M8",
+      "name": "08 · Deferred enhancements",
+      "description": "Separately gated P2 or optional features; excluded from the core release commitment.",
+      "linearId": "6c30dd3b-d3c1-4dff-a394-bec4edb91984"
+    }
+  ],
+  "issues": [
+    {
+      "key": "foundation",
+      "kind": "epic",
+      "title": "[Epic] Review and operationalize the monorepo foundation",
+      "milestone": "M1",
+      "refs": [
+        "NFR-02",
+        "NFR-03",
+        "NFR-04",
+        "NFR-05"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [],
+      "outcome": "Turn the local Rust/Axum + PostgreSQL/Valkey + OpenAPI, strict Next.js CSR and native Kotlin/Swift implementation into a reviewed reproducible baseline.",
+      "acceptance": [
+        "Keep root /api, /web, /mobile; preserve source ai-analyze artifacts. Use contracts/openapi.json for implemented endpoints; source 154-operation design is future scope.",
+        "Require a non-owner/non-BYPASSRLS runtime DB role, owner isolation, exact minor units, balanced immutable journals, idempotency and bounded error payloads.",
+        "Demonstrate fresh setup/migrations, cache outage behavior, contract drift checks and remote CI on an actual revision before calling integration complete.",
+        "Record deployment and restore procedures, secrets/telemetry redaction, patch policy and declared-workload performance evidence. Local validation is not a deployment claim."
+      ],
+      "linear": {
+        "id": "MAN-80",
+        "uuid": "0fc38d40-bac0-4241-a07c-2ca4da9d2dae",
+        "url": "https://linear.app/skyholding/issue/MAN-80/epic-review-and-operationalize-the-monorepo-foundation"
+      }
+    },
+    {
+      "key": "security",
+      "kind": "epic",
+      "title": "[Epic] Complete encrypted identity and account lifecycle",
+      "milestone": "M1",
+      "refs": [
+        "FR-21",
+        "NFR-02",
+        "NFR-04"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [],
+      "outcome": "Keep personal details client-encrypted while readable finance remains scoped to a proven pseudonymous owner.",
+      "acceptance": [
+        "Review key enrollment, recovery, atomic credential rotation, envelope version migration and all-device revocation; reject old credentials after successful rotation.",
+        "Implement scoped step-up, session expiry, account reset/delete preview and explicit retention behavior. Replace source identity-provider password assumptions with the approved recovery-key protocol.",
+        "Persist secrets only through reviewed device storage; lock/background/failed-network behavior must clear usable in-memory state promptly.",
+        "Audit identity leakage via profile photos, household/member/wallet names, finance text, files, analytics, IP/timing metadata, notifications and providers. Explain pseudonymity and irreversible key loss accurately.",
+        "Persist owner-managed reporting preferences and default person-split ratios with version checks; changing defaults never rewrites historical money."
+      ],
+      "linear": {
+        "id": "MAN-81",
+        "uuid": "4c59baab-11fb-4362-9b4e-84884c66ac4b",
+        "url": "https://linear.app/skyholding/issue/MAN-81/epic-complete-encrypted-identity-and-account-lifecycle"
+      }
+    },
+    {
+      "key": "household",
+      "kind": "epic",
+      "title": "[Epic] Add household membership and verified sharing",
+      "milestone": "M2",
+      "refs": [
+        "FR-20",
+        "NFR-02"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "security"
+      ],
+      "outcome": "Let owners invite and revoke members without exposing private profile details to the server.",
+      "acceptance": [
+        "Define migration from personal ownership to explicit household membership and owner/member role checks without granting broad access implicitly.",
+        "Bind expiring single-use invites to the intended pseudonymous recipient; prevent replay, key substitution and cross-household access.",
+        "Share only user-approved identity fields using recipient-verified encryption envelopes. Membership alone must not unlock private profiles or share the master recovery key.",
+        "Revoke future API/file/feed/job access promptly with two-user concurrent tests; disclose that prior recipients can retain data already copied. Restricted child roles remain undecided."
+      ],
+      "linear": {
+        "id": "MAN-82",
+        "uuid": "be92c8b6-603b-480c-baa8-06dae66cd005",
+        "url": "https://linear.app/skyholding/issue/MAN-82/epic-add-household-membership-and-verified-sharing"
+      }
+    },
+    {
+      "key": "navigation",
+      "kind": "epic",
+      "title": "[Epic] Complete navigation, drafts and accessible forms",
+      "milestone": "M3",
+      "refs": [
+        "FR-01",
+        "NFR-01"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "household"
+      ],
+      "outcome": "Reach each in-scope feature through Beranda/Keuangan/Kalender/Lainnya consistently on web, Android and iOS.",
+      "acceptance": [
+        "Implement menu search separately from record search; deep links and native back navigation resolve the correct scoped screen.",
+        "Preserve valid drafts across navigation; make loading, empty, retry, saved and conflict states distinct; prevent double submission.",
+        "Use Indonesian labels and shared design tokens with platform-native components, safe areas, focus/error associations, keyboard access and large text.",
+        "Test 320–1920px web layouts and native navigation; never persist recovery keys/profile plaintext in generic draft storage."
+      ],
+      "linear": {
+        "id": "MAN-83",
+        "uuid": "5dc32a8c-e674-4f92-8e24-d560f2384493",
+        "url": "https://linear.app/skyholding/issue/MAN-83/epic-complete-navigation-drafts-and-accessible-forms"
+      }
+    },
+    {
+      "key": "wallets",
+      "kind": "epic",
+      "title": "[Epic] Complete wallet types and audited balances",
+      "milestone": "M3",
+      "refs": [
+        "FR-03"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "household"
+      ],
+      "outcome": "Model cash, bank, e-wallet, credit and external wallets with explicit ownership and audited opening/adjustment operations.",
+      "acceptance": [
+        "Support names/icons, wealth inclusion and archive while retaining historical references; review identity-bearing labels under the privacy policy.",
+        "Opening state and adjustments produce purpose-tagged journals with reasons, never balance overwrites.",
+        "Keep credit limit, outstanding, available balance and overpayment credit distinct: limit10000/outstanding2000 -> available8000.",
+        "Reject inaccessible wallets and conflicting updates; reconcile every displayed balance to journals across all clients."
+      ],
+      "linear": {
+        "id": "MAN-84",
+        "uuid": "884262d6-95fd-412d-8d19-377c7707f813",
+        "url": "https://linear.app/skyholding/issue/MAN-84/epic-complete-wallet-types-and-audited-balances"
+      }
+    },
+    {
+      "key": "transfers",
+      "kind": "epic",
+      "title": "[Epic] Post atomic transfers and credit repayments",
+      "milestone": "M3",
+      "refs": [
+        "FR-04"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "wallets"
+      ],
+      "outcome": "Move principal between accessible wallets atomically and account for fees separately.",
+      "acceptance": [
+        "Transfer1000 with fee50 produces source−1050 and destination+1000; fee is expense and principal internal movement.",
+        "Reject identical wallets, cross-household wallets and invalid precision/overflow before mutation.",
+        "Credit repayment reduces cash and liability together; explicit overpayment creates CR rather than an erroneous negative liability.",
+        "Use deterministic lock order and one durable business-operation identity; concurrent retries, rollback and grouped display cannot duplicate effects."
+      ],
+      "linear": {
+        "id": "MAN-85",
+        "uuid": "5112f089-944e-4fa6-8295-6fd7ca07faab",
+        "url": "https://linear.app/skyholding/issue/MAN-85/epic-post-atomic-transfers-and-credit-repayments"
+      }
+    },
+    {
+      "key": "transactions",
+      "kind": "epic",
+      "title": "[Epic] Add transaction metadata, corrections and exact splits",
+      "milestone": "M3",
+      "refs": [
+        "FR-05"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "wallets"
+      ],
+      "outcome": "Extend current income/expense capture with reviewed splits and domain-consistent corrections.",
+      "acceptance": [
+        "Add date/time, merchant, description, need/want, member, category and fee with version-protected metadata edits and duplicate-to-draft.",
+        "Money edits create a linked reversal/replacement; coordinate originating debt/asset/grocery/service records and postings atomically.",
+        "Split1234.56 exactly as617.28+617.28; deterministic largest-remainder allocation preserves one-cent remainders. Reject excess precision and overflow.",
+        "Preserve retry identity across refresh failure; reviewed totals/destination/direction match saved records on all clients.",
+        "Refine category master-data children before category-based splits; budget-period children follow transaction accounting, avoiding a transactions/budgets dependency cycle."
+      ],
+      "linear": {
+        "id": "MAN-86",
+        "uuid": "6c7fd036-a016-4c5d-82e0-b3c28a0015d1",
+        "url": "https://linear.app/skyholding/issue/MAN-86/epic-add-transaction-metadata-corrections-and-exact-splits"
+      }
+    },
+    {
+      "key": "history",
+      "kind": "epic",
+      "title": "[Epic] Deliver stable searchable transaction history",
+      "milestone": "M3",
+      "refs": [
+        "FR-06"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions",
+        "transfers"
+      ],
+      "outcome": "Find and inspect transactions with stable pagination and consistent filters.",
+      "acceptance": [
+        "Search merchant/description and filter date/category/member/wallet/type; reset restores documented defaults.",
+        "Stable date/amount sorting and scoped cursors produce no duplicate or missing rows under the defined concurrent-write policy.",
+        "Group transfer legs as one business operation; show corrections, fee breakdown and original operation lineage.",
+        "Match web/native behavior, empty/error states and authorized CSV/report drill-through; log no searched financial descriptions."
+      ],
+      "linear": {
+        "id": "MAN-87",
+        "uuid": "a9705fa8-fedd-4129-9b2c-7527fd3feca3",
+        "url": "https://linear.app/skyholding/issue/MAN-87/epic-deliver-stable-searchable-transaction-history"
+      }
+    },
+    {
+      "key": "budgets",
+      "kind": "epic",
+      "title": "[Epic] Build category hierarchy and budget cycles",
+      "milestone": "M4",
+      "refs": [
+        "FR-08"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions"
+      ],
+      "outcome": "Plan category spending without losing historical meaning when categories change.",
+      "acceptance": [
+        "Support parent plus one subcategory level, icon/color/default need-want, optional wallet restrictions and archive.",
+        "Support period amounts, due dates, cycle-start days1–28, list/card/reorder with accessible controls and version conflicts.",
+        "Define category migration from existing free-text values; retain old transaction attribution and reject invalid hierarchy/cross-household mappings.",
+        "Explain included cashflow in trend labels; reconcile period actuals to economic-purpose reports at timezone boundaries."
+      ],
+      "linear": {
+        "id": "MAN-88",
+        "uuid": "84320a60-4d22-424d-9e6b-e55387f66de7",
+        "url": "https://linear.app/skyholding/issue/MAN-88/epic-build-category-hierarchy-and-budget-cycles"
+      }
+    },
+    {
+      "key": "debts",
+      "kind": "epic",
+      "title": "[Epic] Implement debt and receivable lifecycles",
+      "milestone": "M4",
+      "refs": [
+        "FR-09"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions",
+        "transfers"
+      ],
+      "outcome": "Track principal, interest and fees without inflating ordinary spending or allowing overpayment races.",
+      "acceptance": [
+        "Support borrowing/lending/credit-goods origins, prior balances, tenor/rate/due dates and explicit optional wallet effects.",
+        "Lend2000, receive500 => remaining1500; payment1501 fails atomically. Concurrent payments cannot overpay the current remainder.",
+        "Principal/interest/fee post distinctly; archive/restore preserves all balances and correction lineage.",
+        "Privacy-review person/notes fields; reminders prepare an editable message and do not send it automatically."
+      ],
+      "linear": {
+        "id": "MAN-89",
+        "uuid": "52dc4629-c559-4504-b782-072ad829669c",
+        "url": "https://linear.app/skyholding/issue/MAN-89/epic-implement-debt-and-receivable-lifecycles"
+      }
+    },
+    {
+      "key": "goals",
+      "kind": "epic",
+      "title": "[Epic] Implement savings reservations and goal progress",
+      "milestone": "M4",
+      "refs": [
+        "FR-10"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions",
+        "transfers"
+      ],
+      "outcome": "Reserve existing funds and show goal progress without minting wealth or double-debiting wallets.",
+      "acceptance": [
+        "Require name/type/target; allow deadline/default wallet, contribution, release and cross-wallet movement with explicit previews.",
+        "Reserve1500 from100000 => wallet100000, free cash98500; release500 => reservation1000.",
+        "Concurrent reservations lock/check available free cash and reject insufficiency; archive/correction preserves ledger consistency.",
+        "Define asset-link interface: linked market value adds to goal progress, while household wealth counts each asset once; complete asset tests with investments epic."
+      ],
+      "linear": {
+        "id": "MAN-90",
+        "uuid": "1eebf279-e516-4fc0-b1a4-252e7111139c",
+        "url": "https://linear.app/skyholding/issue/MAN-90/epic-implement-savings-reservations-and-goal-progress"
+      }
+    },
+    {
+      "key": "reports",
+      "kind": "epic",
+      "title": "[Epic] Reconcile period reports, Excel and print",
+      "milestone": "M4",
+      "refs": [
+        "FR-14"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "budgets",
+        "debts",
+        "goals"
+      ],
+      "outcome": "Present balances and economic-purpose totals consistently across UI and exported reports.",
+      "acceptance": [
+        "Support day/week/month/year/custom periods in explicit household timezone and category/member/wallet/need-want/budget breakdowns.",
+        "Exclude internal transfers, opening balances and reservations from ordinary income/spending; separate debt principal, interest and fees.",
+        "UI, print and Excel share identical filters and exact totals; guard spreadsheet formula injection and scope authorized download access.",
+        "IDR remains bookkeeping currency; optional display conversion shows timestamp/source/base amounts and never rewrites accepted money."
+      ],
+      "linear": {
+        "id": "MAN-91",
+        "uuid": "900788e7-5a4e-4597-9858-26426fb64643",
+        "url": "https://linear.app/skyholding/issue/MAN-91/epic-reconcile-period-reports-excel-and-print"
+      }
+    },
+    {
+      "key": "files",
+      "kind": "epic",
+      "title": "[Epic] Build private files, jobs and transactional outbox",
+      "milestone": "M5",
+      "refs": [
+        "NFR-04",
+        "NFR-05"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "household",
+        "security"
+      ],
+      "outcome": "Provide the authorized file and job substrate needed by receipts, imports, exports and reminders.",
+      "acceptance": [
+        "Enforce configured20MiB/type/signature limits and malware/quarantine checks; strip/review metadata, use short-lived authorized downloads.",
+        "Validate ownership for uploads, polling, cancellation and result downloads; reject revoked members and expired links.",
+        "Commit domain work and outbox records atomically; at-least-once workers deduplicate delivery, expose terminal failure/retry/cancel states.",
+        "Set content/log retention, redaction and cleanup; recover interrupted workers and orphaned uploads without leaking receipts or profile fields."
+      ],
+      "linear": {
+        "id": "MAN-92",
+        "uuid": "e07b9a3b-53a3-4665-81a4-b7d05a42ab68",
+        "url": "https://linear.app/skyholding/issue/MAN-92/epic-build-private-files-jobs-and-transactional-outbox"
+      }
+    },
+    {
+      "key": "capture",
+      "kind": "epic",
+      "title": "[Epic] Add reviewed text and receipt capture",
+      "milestone": "M5",
+      "refs": [
+        "FR-07"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "files",
+        "transactions",
+        "transfers"
+      ],
+      "outcome": "Create editable transaction drafts from text, receipts and transfer proofs; never post unreviewed extraction.",
+      "acceptance": [
+        "Support explicit provider consent, uncertainty markers, original-file linkage and manual correction before commit.",
+        "Test batches of1–10 files and reject11; per-file failures remain visible and retryable rather than silently disappearing.",
+        "Distinguish transfer proof from spending and preserve exact decimal values/categories/wallet selection through review.",
+        "Keep provider keys server-side and profile secrets client-side; redact request logs, bound retries/timeouts and prevent duplicate reviewed commits."
+      ],
+      "linear": {
+        "id": "MAN-93",
+        "uuid": "6459a019-df76-406e-b697-c03dd919fdda",
+        "url": "https://linear.app/skyholding/issue/MAN-93/epic-add-reviewed-text-and-receipt-capture"
+      }
+    },
+    {
+      "key": "recurring",
+      "kind": "epic",
+      "title": "[Epic] Add reviewed recurring transaction templates",
+      "milestone": "M5",
+      "refs": [
+        "FR-13"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions",
+        "files"
+      ],
+      "outcome": "Schedule monthly/yearly templates that open a review before recording one occurrence.",
+      "acceptance": [
+        "Store amount/category/wallet/person/fee and permitted linked debt/goal/asset references with authorization checks.",
+        "Occurrence uniqueness survives response-cache expiration; repeated/concurrent reviews cannot commit twice for one due date.",
+        "Document day31 clamp and timezone policy; handle edited schedules, archived destinations and explicit corrections.",
+        "Automatic posting remains disabled and tracked separately as P2."
+      ],
+      "linear": {
+        "id": "MAN-94",
+        "uuid": "863072a1-0cd4-4590-be3c-b009acfa024c",
+        "url": "https://linear.app/skyholding/issue/MAN-94/epic-add-reviewed-recurring-transaction-templates"
+      }
+    },
+    {
+      "key": "groceries",
+      "kind": "epic",
+      "title": "[Epic] Deliver groceries and atomic selected checkout",
+      "milestone": "M5",
+      "refs": [
+        "FR-16"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions",
+        "files",
+        "capture"
+      ],
+      "outcome": "Turn selected grocery items into a reviewed purchase with an explicit wallet or record-only choice.",
+      "acceptance": [
+        "Support sections, order, quantities/unit prices, merchant, recurring needs and immutable purchase/price history.",
+        "Preview only selected lines with exact sum; changing live list prices cannot rewrite completed purchase lines.",
+        "Checkout commits purchase plus journal atomically; retry/concurrent checkout cannot record the same purchase twice.",
+        "Receipt item extraction uses the reviewed-capture workflow; corrections reverse/replace accounting and linked purchase state together."
+      ],
+      "linear": {
+        "id": "MAN-95",
+        "uuid": "c48c7e1a-6d0b-401c-8c6b-4dcc651d068b",
+        "url": "https://linear.app/skyholding/issue/MAN-95/epic-deliver-groceries-and-atomic-selected-checkout"
+      }
+    },
+    {
+      "key": "calendar",
+      "kind": "epic",
+      "title": "[Epic] Build calendar, tasks and occurrence-safe reminders",
+      "milestone": "M5",
+      "refs": [
+        "FR-17"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "files"
+      ],
+      "outcome": "Coordinate dated, timed and undated commitments without mutating an entire recurring series accidentally.",
+      "acceptance": [
+        "Support month/week/day, event/checklist categories, assignees, order/color, time windows, complete/undo and accessible controls.",
+        "Separate date-only from timed data; use household timezone, day31 clamp and occurrence/future/all edit scopes.",
+        "Record reminder terminal states; target99% eligible jobs terminal within5minutes, report push-provider delivery separately.",
+        "Import and read-only feeds require scoped revocable access; one occurrence completion never completes the series."
+      ],
+      "linear": {
+        "id": "MAN-96",
+        "uuid": "5b48041c-7138-4fff-849d-a51984321752",
+        "url": "https://linear.app/skyholding/issue/MAN-96/epic-build-calendar-tasks-and-occurrence-safe-reminders"
+      }
+    },
+    {
+      "key": "maintenance",
+      "kind": "epic",
+      "title": "[Epic] Link maintenance history, costs and calendar",
+      "milestone": "M5",
+      "refs": [
+        "FR-18"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions",
+        "calendar",
+        "files"
+      ],
+      "outcome": "Record vehicle/home/electronics service with explicit financial and reminder consequences.",
+      "acceptance": [
+        "Manage resources, intervals, next-due dates, service/repair history and authorized attachments.",
+        "Preview explicit wallet or record-only cost and linked reminder before save.",
+        "Atomically create service history and any financial journal; coordinate reminder outbox with the committed result.",
+        "Corrections replace linked money and update calendar state consistently; retries and archive retain full history."
+      ],
+      "linear": {
+        "id": "MAN-97",
+        "uuid": "392b2ea3-8e28-4b52-93d3-21f532f343e9",
+        "url": "https://linear.app/skyholding/issue/MAN-97/epic-link-maintenance-history-costs-and-calendar"
+      }
+    },
+    {
+      "key": "links",
+      "kind": "epic",
+      "title": "[Epic] Protect important links with scoped step-up",
+      "milestone": "M5",
+      "refs": [
+        "FR-19"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "security",
+        "household"
+      ],
+      "outcome": "Store ordered household links and protect sensitive viewing without exposing PINs.",
+      "acceptance": [
+        "Validate only safe http/https URLs and reject script/data/credential-bearing URLs using one documented policy.",
+        "Support name/category/order/create/edit/archive with household isolation.",
+        "Require configured step-up for sensitive views; PIN never appears in URLs/logs and unlock scope/expiry is explicit.",
+        "Open links with opener isolation; test keyboard/native external-browser behavior and failed step-up throttling."
+      ],
+      "linear": {
+        "id": "MAN-98",
+        "uuid": "315bc446-c2f1-41a4-ad4a-8d36e213bf4c",
+        "url": "https://linear.app/skyholding/issue/MAN-98/epic-protect-important-links-with-scoped-step-up"
+      }
+    },
+    {
+      "key": "imports",
+      "kind": "epic",
+      "title": "[Epic] Implement previewed imports, selective export and backup jobs",
+      "milestone": "M5",
+      "refs": [
+        "FR-22"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "files",
+        "reports"
+      ],
+      "outcome": "Move data in and out with explicit scope, repeatable validation and atomic commit.",
+      "acceptance": [
+        "Version templates; provide row-specific Indonesian errors and proposed category/wallet mappings before committing a preview hash.",
+        "Preserve321.09 exactly; reject negative expense inputs and stale/tampered previews; batch rollback leaves no partial rows.",
+        "Persist source fingerprints beyond24-hour cache TTL; repeated imports require explicit resolution rather than duplicate postings.",
+        "Select only in-scope domains for export; authorize job downloads and exclude recovery keys/profile plaintext. Test formula injection and restore reconciliation."
+      ],
+      "linear": {
+        "id": "MAN-99",
+        "uuid": "c8d02eb7-e655-4c94-adcb-b7ae8d8c0577",
+        "url": "https://linear.app/skyholding/issue/MAN-99/epic-implement-previewed-imports-selective-export-and-backup-jobs"
+      }
+    },
+    {
+      "key": "investments",
+      "kind": "epic",
+      "title": "[Epic] Implement investment lots, valuation and trades",
+      "milestone": "M6",
+      "refs": [
+        "FR-11"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "transactions",
+        "goals"
+      ],
+      "outcome": "Track units, remaining cost basis and market value independently from cashflow and goal reservations.",
+      "acceptance": [
+        "Support specified asset classes with class-specific units/pricing, ownership and goal links; provenance timestamps identify approximate valuations.",
+        "Buy2@1000, value1500/unit, sell1@1500 => remaining units1/cost1000/value1500/realized gain500 before fees.",
+        "Correct units to1.5 while preserving remaining cost1000 and a reason; concurrent sales cannot oversell.",
+        "Account for purchase/sale fees, dividend/income and corrections atomically; linked goals and household wealth count assets once."
+      ],
+      "linear": {
+        "id": "MAN-100",
+        "uuid": "a1b67959-efdb-4da4-a948-7e3095285fb1",
+        "url": "https://linear.app/skyholding/issue/MAN-100/epic-implement-investment-lots-valuation-and-trades"
+      }
+    },
+    {
+      "key": "allocation",
+      "kind": "epic",
+      "title": "[Epic] Apply exact income and asset allocation plans",
+      "milestone": "M6",
+      "refs": [
+        "FR-12"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "budgets",
+        "goals",
+        "investments"
+      ],
+      "outcome": "Preview exact planned shares and atomically apply period budget limits without implicitly moving money.",
+      "acceptance": [
+        "Keep income allocation and asset target allocation as separate models; goal/asset targets are planning references, not authority to reserve or trade.",
+        "Require total 100% before apply; largest-remainder shares sum exactly to accepted principal, including one-cent cases.",
+        "Preview exact period budget-limit changes and reject stale versions. Goal reservations require a separate reviewed goal command; asset trades are never implicit.",
+        "Atomic idempotent apply cannot leave partial budget-limit updates under concurrent requests or failure."
+      ],
+      "linear": {
+        "id": "MAN-101",
+        "uuid": "d3bf9b68-d82f-4cd6-9095-751f5c089915",
+        "url": "https://linear.app/skyholding/issue/MAN-101/epic-apply-exact-income-and-asset-allocation-plans"
+      }
+    },
+    {
+      "key": "calculators",
+      "kind": "epic",
+      "title": "[Epic] Add versioned loan and education scenarios",
+      "milestone": "M6",
+      "refs": [
+        "FR-15"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "goals"
+      ],
+      "outcome": "Save explainable planning calculations and create goal drafts without posting money automatically.",
+      "acceptance": [
+        "Support fixed/tiered loan rates, extra payments and takeover comparison with explicit assumptions and rounding.",
+        "Zero-rate1200000/12 =>100000; test boundary rates/tenors and invalid inputs with versioned deterministic results.",
+        "Support education inflation and funding estimates; show assumptions rather than presenting forecasts as guarantees.",
+        "Create an editable goal draft from a selected scenario and preserve its formula version/provenance."
+      ],
+      "linear": {
+        "id": "MAN-102",
+        "uuid": "c21a7489-1d31-47bf-a257-7f397391fd70",
+        "url": "https://linear.app/skyholding/issue/MAN-102/epic-add-versioned-loan-and-education-scenarios"
+      }
+    },
+    {
+      "key": "home",
+      "kind": "epic",
+      "title": "[Epic] Add period dashboard, notifications and explainable insights",
+      "milestone": "M6",
+      "refs": [
+        "FR-02"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "reports",
+        "calendar",
+        "files"
+      ],
+      "outcome": "Show current finances and agenda with clear reporting periods and authorized notifications.",
+      "acceptance": [
+        "Support period/wallet filters, today's agenda, recent entries and accessible amount masking.",
+        "Persist notification read state; review push payloads so identity/finance details are not sent without explicit policy.",
+        "Generated insights cite period and underlying totals; separate consent for provider processing and aggregate analytics.",
+        "Loading/error/empty states match all clients. Optional weather is separately gated with manual-location fallback."
+      ],
+      "linear": {
+        "id": "MAN-103",
+        "uuid": "e5d0c36c-35b4-4166-9ea1-e5e30f3499e9",
+        "url": "https://linear.app/skyholding/issue/MAN-103/epic-add-period-dashboard-notifications-and-explainable-insights"
+      }
+    },
+    {
+      "key": "integrations",
+      "kind": "epic",
+      "title": "[Epic] Add optional consented Sheets and provider integrations",
+      "milestone": "M6",
+      "refs": [
+        "FR-22"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "imports",
+        "security"
+      ],
+      "outcome": "Connect optional external providers with revocable least-privilege consent.",
+      "acceptance": [
+        "Define provider identity-disclosure boundaries before enabling OAuth; never imply third parties cannot correlate an account.",
+        "Use least scopes, encrypted provider-token storage, explicit export selection and disconnect/revoke behavior.",
+        "Exercise provider sandbox expiry, outage,429,partial response, callback replay and retries without duplicate bookkeeping.",
+        "Keep provider features separately disabled until credentials, privacy review and operational ownership are established."
+      ],
+      "linear": {
+        "id": "MAN-104",
+        "uuid": "20839eb2-df2c-4146-8a24-4bf6cb118520",
+        "url": "https://linear.app/skyholding/issue/MAN-104/epic-add-optional-consented-sheets-and-provider-integrations"
+      }
+    },
+    {
+      "key": "affiliate",
+      "kind": "epic",
+      "title": "[Epic] Isolate affiliate commissions and payouts",
+      "milestone": "M6",
+      "refs": [
+        "FR-23"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "security",
+        "files"
+      ],
+      "outcome": "Track a participant's referrals and payout lifecycle with separate operator authority and explicit identity disclosure.",
+      "acceptance": [
+        "Own referral links/history only; household role never grants commission administration or payout authority.",
+        "Available amount excludes pending/paid/reversed commission; configurable default minimum withdrawal50000IDR.",
+        "Payout destinations/KYC can reveal identity: approve storage, access, retention and disclosure before enabling payouts.",
+        "Provider effects and webhooks have durable idempotency; test concurrent withdrawals, reversals, partial failures and operator audit."
+      ],
+      "linear": {
+        "id": "MAN-105",
+        "uuid": "c9d41f7a-8198-445e-9a19-f0ae8b032d41",
+        "url": "https://linear.app/skyholding/issue/MAN-105/epic-isolate-affiliate-commissions-and-payouts"
+      }
+    },
+    {
+      "key": "help",
+      "kind": "epic",
+      "title": "[Epic] Publish accurate help and privacy-separated feedback",
+      "milestone": "M6",
+      "refs": [
+        "FR-24"
+      ],
+      "priority": 3,
+      "state": "Backlog",
+      "blockedBy": [
+        "security"
+      ],
+      "outcome": "Explain the actual product and separate public feedback from private household records.",
+      "acceptance": [
+        "Localize FAQ/about/privacy/terms and recovery/lock/PIN/currency guidance; text must match implemented behavior.",
+        "Provide feedback topic/status/search/my-requests with at most one vote per pseudonymous account.",
+        "Use distinct public submissions and operator moderation permissions; never copy profile or household finance into public content implicitly.",
+        "Cover keyboard/screen-reader interactions and abuse/error states; store policy versions shown to users."
+      ],
+      "linear": {
+        "id": "MAN-106",
+        "uuid": "cfc4737e-08d7-4673-a37d-b582fad992d2",
+        "url": "https://linear.app/skyholding/issue/MAN-106/epic-publish-accurate-help-and-privacy-separated-feedback"
+      }
+    },
+    {
+      "key": "release",
+      "kind": "epic",
+      "title": "[Epic] Complete measured pilot and production release gates",
+      "milestone": "M7",
+      "refs": [
+        "NFR-01",
+        "NFR-02",
+        "NFR-03",
+        "NFR-04",
+        "NFR-05"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "foundation",
+        "security",
+        "household",
+        "navigation",
+        "wallets",
+        "transfers",
+        "transactions",
+        "history",
+        "budgets",
+        "debts",
+        "goals",
+        "reports"
+      ],
+      "outcome": "Release only an explicitly selected, evidenced scope with accountable operational owners.",
+      "acceptance": [
+        "Record independently reviewed crypto/privacy, two-household isolation, journal reconciliation, provider-failure cases and zero unresolved P0/P1 data-integrity defects.",
+        "Measure all core flows on web320–1920px, keyboard/screen reader/contrast and native large text/physical devices; cover supported browsers and native lifecycle races.",
+        "Declare dataset/concurrency for p95 read<500ms/write<1s excluding providers; configure measured99.9% availability target and redacted observability.",
+        "Exercise restore with proposed RPO24h/RTO4h, signed Android/iOS distribution, HTTPS/CSP, incident/rollback runbooks and named release owners.",
+        "Pilot expense capture target:90% complete unaided, median<45s; validate full activation with first wallet, transaction and budget/goal. Do not treat proposed targets as measured results."
+      ],
+      "linear": {
+        "id": "MAN-107",
+        "uuid": "113c8768-7e28-4bbd-ad29-8a8b4b553458",
+        "url": "https://linear.app/skyholding/issue/MAN-107/epic-complete-measured-pilot-and-production-release-gates"
+      }
+    },
+    {
+      "key": "automatic",
+      "kind": "epic",
+      "title": "[Epic] Opt-in automatic recurring posting (P2)",
+      "milestone": "M8",
+      "refs": [
+        "FR-13"
+      ],
+      "priority": 4,
+      "state": "Backlog",
+      "blockedBy": [
+        "recurring",
+        "release"
+      ],
+      "outcome": "Evaluate automatic posting only after reviewed recurrence is reliable and the product explicitly approves the enhancement.",
+      "acceptance": [
+        "Require opt-in, previewed schedules, revocation/kill switch and visible upcoming/failed occurrences.",
+        "Maintain permanent due-date uniqueness and domain invariants under retries, outages and timezone changes.",
+        "Define insufficient-funds and archived-wallet behavior; no silent partial processing.",
+        "Do not enable or include in core release scope without a separate rollout decision."
+      ],
+      "linear": {
+        "id": "MAN-108",
+        "uuid": "0ba4fc4f-7657-43e7-a5d1-a3fe217fb444",
+        "url": "https://linear.app/skyholding/issue/MAN-108/epic-opt-in-automatic-recurring-posting-p2"
+      }
+    },
+    {
+      "key": "weather",
+      "kind": "epic",
+      "title": "[Epic] Optional weather and display-currency providers",
+      "milestone": "M8",
+      "refs": [
+        "FR-02",
+        "FR-21"
+      ],
+      "priority": 4,
+      "state": "Backlog",
+      "blockedBy": [
+        "home",
+        "integrations"
+      ],
+      "outcome": "Refine optional convenience providers only after core financial behavior is stable.",
+      "acceptance": [
+        "Offer manual location; do not require precise location or identify a household through unnecessary telemetry.",
+        "Choose supported display currencies and timestamped quotation providers through an explicit product decision.",
+        "Always show IDR base amounts/rate provenance; unavailable providers cannot alter saved money or block core flows.",
+        "Gate rollout independently and document provider data/retention."
+      ],
+      "linear": {
+        "id": "MAN-109",
+        "uuid": "1202bb1b-b0a4-4691-b841-0877dff5b21c",
+        "url": "https://linear.app/skyholding/issue/MAN-109/epic-optional-weather-and-display-currency-providers"
+      }
+    },
+    {
+      "key": "baseline",
+      "kind": "task",
+      "title": "Review and integrate the locally validated monorepo baseline",
+      "milestone": "M1",
+      "parent": "foundation",
+      "refs": [
+        "NFR-02",
+        "NFR-05"
+      ],
+      "priority": 2,
+      "state": "Todo",
+      "blockedBy": [],
+      "outcome": "Review the existing local first slice and obtain actual revision-linked integration evidence.",
+      "acceptance": [
+        "Review /api /web /mobile plus migrations, compose, protocol, contracts and docs; verify ai-analyze checksums and avoid committing local credentials/artifacts.",
+        "Run documented Rust, web, database, real-HTTP/browser and native validation on the candidate revision; record exact unrun gates.",
+        "Open an appropriately scoped PR and obtain remote API/web/Android/iOS CI results; distinguish local passes from hosted CI.",
+        "Require normal repository review/merge process; this issue does not itself authorize production deployment."
+      ],
+      "linear": {
+        "id": "MAN-110",
+        "uuid": "0f9901e5-6d6e-491d-9020-66bd219397de",
+        "url": "https://linear.app/skyholding/issue/MAN-110/review-and-integrate-the-locally-validated-monorepo-baseline"
+      }
+    },
+    {
+      "key": "strict_ts",
+      "kind": "task",
+      "title": "Enforce strict TypeScript and resolve checked-boundary errors",
+      "milestone": "M1",
+      "parent": "foundation",
+      "refs": [
+        "NFR-02"
+      ],
+      "priority": 2,
+      "state": "In Review",
+      "blockedBy": [],
+      "outcome": "Apply strict compiler checks to application, tests and Next configuration without weakening the rules.",
+      "acceptance": [
+        "Retain strict:true and enable noUncheckedIndexedAccess, exactOptionalPropertyTypes, noImplicitReturns, noFallthroughCasesInSwitch, noImplicitOverride, noPropertyAccessFromIndexSignature and forceConsistentCasingInFileNames.",
+        "Check next.config.ts and environment declarations; fix unchecked recovery/money parsing, optional fields and typed fetch mocks without suppressions.",
+        "Pass npm --prefix web run typecheck, npm --prefix web test and npm --prefix web run build; ensure make check/CI invoke the compiler.",
+        "Local implementation completed2026-09-27: typecheck,42 tests and static production build pass. Await repository review/integration; not marked Done."
+      ],
+      "linear": {
+        "id": "MAN-111",
+        "uuid": "e9f9eb2c-24f9-4088-9bf8-1c2e51ab54fd",
+        "url": "https://linear.app/skyholding/issue/MAN-111/enforce-strict-typescript-and-resolve-checked-boundary-errors"
+      }
+    },
+    {
+      "key": "contract_ci",
+      "kind": "task",
+      "title": "Enforce runtime contract and cross-client crypto fixtures in CI",
+      "milestone": "M1",
+      "parent": "foundation",
+      "refs": [
+        "NFR-02"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "baseline"
+      ],
+      "outcome": "Prevent API/client drift and cryptographic interoperability regressions on every candidate revision.",
+      "acceptance": [
+        "Generate/check contracts/openapi.json from the runtime and validate OpenAPI3.1; never use the unimplemented source catalog as a live client contract.",
+        "Run independent shared HKDF/AES-GCM/Ed25519 fixtures in web, Rust, Android and iOS and verify error/version behavior.",
+        "Exercise owner-isolation and invalid-envelope/signature cases; bound logs to nonsensitive test evidence.",
+        "Provide actual hosted-CI run links covering all platforms; split platform-specific CI changes into separate follow-up tickets if runner constraints require them."
+      ],
+      "linear": {
+        "id": "MAN-112",
+        "uuid": "64674669-2f3a-43a2-832e-e686de6adcd8",
+        "url": "https://linear.app/skyholding/issue/MAN-112/enforce-runtime-contract-and-cross-client-crypto-fixtures-in-ci"
+      }
+    },
+    {
+      "key": "ios_races",
+      "kind": "task",
+      "title": "Test iOS authentication and background lifecycle races",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "NFR-02"
+      ],
+      "priority": 2,
+      "state": "Todo",
+      "blockedBy": [],
+      "outcome": "Turn source-reviewed Swift lifecycle fixes into deterministic regression evidence.",
+      "acceptance": [
+        "Test background during create/recover, delayed old login/revoke after newer sign-in and lock during in-flight network requests.",
+        "Assert cancelled work cannot repopulate keys/profile/UI and newer sessions are not revoked by stale cleanup.",
+        "Test committed transaction followed by failed refresh: saved status and retry identity cannot duplicate the journal.",
+        "Run Swift tests plus simulator UI/lifecycle harness and preserve redacted failure artifacts."
+      ],
+      "linear": {
+        "id": "MAN-113",
+        "uuid": "d5573f94-986a-4e8d-84ec-7c2444eec230",
+        "url": "https://linear.app/skyholding/issue/MAN-113/test-ios-authentication-and-background-lifecycle-races"
+      }
+    },
+    {
+      "key": "android_races",
+      "kind": "task",
+      "title": "Test Android authentication and background lifecycle races",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "NFR-02"
+      ],
+      "priority": 2,
+      "state": "Todo",
+      "blockedBy": [],
+      "outcome": "Prove Kotlin lifecycle and retry state are safe under delayed transport and app backgrounding.",
+      "acceptance": [
+        "Test background during create/recover, delayed response after a newer sign-in and immediate lock during in-flight requests.",
+        "Assert stale coroutines cannot restore sensitive state or revoke a newer session.",
+        "Test committed write then failed refresh with stable idempotency identity and user-visible committed status.",
+        "Run JVM and instrumented lifecycle tests on an emulator with redacted evidence."
+      ],
+      "linear": {
+        "id": "MAN-114",
+        "uuid": "80acfae1-63a7-4831-a363-3abf8d947c7b",
+        "url": "https://linear.app/skyholding/issue/MAN-114/test-android-authentication-and-background-lifecycle-races"
+      }
+    },
+    {
+      "key": "key_protocol",
+      "kind": "task",
+      "title": "Specify credential rotation, device enrollment and revocation",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "NFR-04"
+      ],
+      "priority": 2,
+      "state": "Todo",
+      "blockedBy": [],
+      "outcome": "Write a reviewable protocol before implementing persistent credentials or changing key material.",
+      "acceptance": [
+        "Specify atomic profile re-encryption/signing-key rotation, all-device revocation, envelope versions and interrupted-operation recovery.",
+        "Define separately scoped device credentials, enrollment proof, trusted-key verification and removal; never transfer a master key through the server.",
+        "Document lost-key behavior, rollback/retry semantics, old-key rejection and cross-platform test vectors.",
+        "Record independent security review findings and resolve critical/high protocol findings before dependent implementation begins."
+      ],
+      "linear": {
+        "id": "MAN-115",
+        "uuid": "45a9e42e-be0c-4665-a924-ed644ac644b6",
+        "url": "https://linear.app/skyholding/issue/MAN-115/specify-credential-rotation-device-enrollment-and-revocation"
+      }
+    },
+    {
+      "key": "revoke_sessions",
+      "kind": "task",
+      "title": "Implement owner-wide session revocation",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "NFR-02"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "key_protocol"
+      ],
+      "outcome": "Allow a fresh owner proof to revoke all sessions reliably under concurrent requests.",
+      "acceptance": [
+        "Add an explicit scoped operation to the runtime OpenAPI with freshness/step-up proof requirements and bounded errors.",
+        "Invalidate sessions atomically, including concurrent issuance under the chosen epoch/locking strategy; verify already revoked tokens fail.",
+        "Test cross-owner attempts, replay, expiry and cache outage; PostgreSQL remains authoritative.",
+        "Return only public status; no token or profile details in audit logs. Client entry points are separate refinements under the security epic."
+      ],
+      "linear": {
+        "id": "MAN-116",
+        "uuid": "c72601ef-7d78-4847-89ab-53ec98e9fc7c",
+        "url": "https://linear.app/skyholding/issue/MAN-116/implement-owner-wide-session-revocation"
+      }
+    },
+    {
+      "key": "retention",
+      "kind": "task",
+      "title": "Specify account erasure and retention boundaries",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "FR-22",
+        "NFR-04"
+      ],
+      "priority": 2,
+      "state": "Todo",
+      "blockedBy": [],
+      "outcome": "Make destructive account actions and their privacy consequences explicit before coding deletion.",
+      "acceptance": [
+        "Inventory identity ciphertext, readable ledger, files, jobs, caches, backups, audit records, provider mappings and shared copies.",
+        "Define scope preview, fresh step-up, retention/backup expiry and completion evidence; distinguish deleting access from erasing stored records.",
+        "Resolve privacy-owner decisions and legal review needs without inventing jurisdictional guarantees.",
+        "Produce accepted schema/API/client follow-up tickets and erasure negative-test cases."
+      ],
+      "linear": {
+        "id": "MAN-117",
+        "uuid": "e4cf6a07-d19f-4ca8-a3b0-caa3e59ba7a2",
+        "url": "https://linear.app/skyholding/issue/MAN-117/specify-account-erasure-and-retention-boundaries"
+      }
+    },
+    {
+      "key": "android_storage",
+      "kind": "task",
+      "title": "Implement reviewed Android credential storage",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "NFR-04"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "key_protocol"
+      ],
+      "outcome": "Support optional native unlock using the reviewed device-credential protocol.",
+      "acceptance": [
+        "Protect device material through Android Keystore and authenticated wrapping; never save raw master keys in preferences, backups, logs or clipboard.",
+        "Define biometric/device-credential cancellation, key invalidation, reinstall and background lock behavior.",
+        "Cover recovery/enrollment and server revocation with Android tests; retain a deliberate memory-only option.",
+        "Pass instrumented device/emulator verification and document security settings and backup exclusions."
+      ],
+      "linear": {
+        "id": "MAN-118",
+        "uuid": "7a463e3a-49d5-49ee-b9bf-4a00c9391789",
+        "url": "https://linear.app/skyholding/issue/MAN-118/implement-reviewed-android-credential-storage"
+      }
+    },
+    {
+      "key": "ios_storage",
+      "kind": "task",
+      "title": "Implement reviewed iOS credential storage",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "NFR-04"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "key_protocol"
+      ],
+      "outcome": "Support optional iOS unlock using the reviewed device-credential protocol.",
+      "acceptance": [
+        "Use appropriate Keychain access controls and device-bound accessibility for approved credential material; no raw master in UserDefaults/backups/logs.",
+        "Specify biometric changes, locked-device access, cancellation, reinstall and background lock behavior.",
+        "Test enrollment/recovery, local removal and remote device revocation; retain a deliberate memory-only option.",
+        "Pass simulator and physical-device checks appropriate to Keychain/biometric behavior and document remaining limits."
+      ],
+      "linear": {
+        "id": "MAN-119",
+        "uuid": "020e0202-99cb-43ab-82d6-ff6c65381337",
+        "url": "https://linear.app/skyholding/issue/MAN-119/implement-reviewed-ios-credential-storage"
+      }
+    },
+    {
+      "key": "delivery_security",
+      "kind": "task",
+      "title": "Verify web delivery integrity and telemetry privacy",
+      "milestone": "M1",
+      "parent": "foundation",
+      "refs": [
+        "FR-21",
+        "NFR-04"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "baseline"
+      ],
+      "outcome": "Make the production delivery boundary of client encryption and operator-visible metadata explicit.",
+      "acceptance": [
+        "Define/test HTTPS, CSP, dependency integrity, framing/referrer policy and production origin/CORS configuration.",
+        "Assert build artifacts/SSR output/logs/analytics contain no profile plaintext, recovery keys, bearer tokens or financial descriptions.",
+        "Audit push, file metadata, URLs and provider flows for identity correlation; document active-malicious-client-delivery limitations.",
+        "Attach staging header/config evidence and threat-model findings before enabling public traffic."
+      ],
+      "linear": {
+        "id": "MAN-120",
+        "uuid": "2102c43b-1a7d-405f-aa17-23fae73e0492",
+        "url": "https://linear.app/skyholding/issue/MAN-120/verify-web-delivery-integrity-and-telemetry-privacy"
+      }
+    },
+    {
+      "key": "restore",
+      "kind": "task",
+      "title": "Execute a disposable PostgreSQL backup and restore drill",
+      "milestone": "M1",
+      "parent": "foundation",
+      "refs": [
+        "NFR-05"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "baseline"
+      ],
+      "outcome": "Prove a backup restores complete, authorized and balanced application state in a separate environment.",
+      "acceptance": [
+        "Back up a disposable seeded instance and restore to a new isolated PostgreSQL environment without overwriting existing user data.",
+        "Verify migrations, restricted runtime roles, owner isolation, journals, profile ciphertext and durable idempotency after restore.",
+        "Measure achieved RPO/RTO against proposed24h/4h targets and record encrypted backup/key storage and access policy.",
+        "Document repeatable commands, failure recovery and cleanup with a named operational owner."
+      ],
+      "linear": {
+        "id": "MAN-121",
+        "uuid": "f82537e6-309d-4499-9c1e-38d7abe9bd3e",
+        "url": "https://linear.app/skyholding/issue/MAN-121/execute-a-disposable-postgresql-backup-and-restore-drill"
+      }
+    },
+    {
+      "key": "abuse_stepup",
+      "kind": "task",
+      "title": "Specify and test authentication abuse and step-up controls",
+      "milestone": "M1",
+      "parent": "security",
+      "refs": [
+        "FR-21",
+        "NFR-02"
+      ],
+      "priority": 2,
+      "state": "Backlog",
+      "blockedBy": [
+        "key_protocol"
+      ],
+      "outcome": "Bound public authentication abuse and define sensitive-action authorization separately from a local UI lock.",
+      "acceptance": [
+        "Define challenge TTL/use limits, registration/auth rate limits, privacy-preserving counters and bounded abuse errors.",
+        "Specify fresh-proof step-up scopes for links, destructive actions, rotation and provider changes; never treat a client-only PIN as server authorization.",
+        "Test replay, parallel attempts, lockout recovery and throttling outage behavior without identifier enumeration.",
+        "Implement one reviewed API control slice and create separate remaining client/control tickets before expanding the change."
+      ],
+      "linear": {
+        "id": "MAN-122",
+        "uuid": "832a6597-99c8-4e28-9e7e-97ddcfc606ee",
+        "url": "https://linear.app/skyholding/issue/MAN-122/specify-and-test-authentication-abuse-and-step-up-controls"
+      }
+    },
+    {
+      "key": "refinement",
+      "kind": "task",
+      "title": "Resolve release scope, ownership and provider decisions",
+      "milestone": "M1",
+      "parent": "foundation",
+      "refs": [
+        "FR-20",
+        "FR-21",
+        "FR-22",
+        "FR-23"
+      ],
+      "priority": 2,
+      "state": "Todo",
+      "blockedBy": [],
+      "outcome": "Assign product/security/engineering/QA/operations decision owners and refine the next bounded work packages.",
+      "acceptance": [
+        "Confirm capacity and target-release subset before assigning issue dates/estimates; preserve the existing project target as a planning horizon.",
+        "Decide invitation policy, retention, supported display currencies, quotation/OCR providers and affiliate disclosure/payment constraints.",
+        "Keep restricted child roles undecided and excluded modules out of scope; optional integrations and P2 automatic posting stay disabled.",
+        "Split broad epics into API/schema, web, Android, iOS and integration/rollout children with independent acceptance criteria; target1–3 engineering days per implementation task where credible."
+      ],
+      "linear": {
+        "id": "MAN-123",
+        "uuid": "4cb73fed-361f-4e6a-9945-96d41db91fdc",
+        "url": "https://linear.app/skyholding/issue/MAN-123/resolve-release-scope-ownership-and-provider-decisions"
+      }
+    }
+  ],
+  "publishedIssueCount": 44,
+  "blockingRelationshipCount": 70
+}

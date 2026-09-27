@@ -1,0 +1,17 @@
+{
+  "name": "palmy-tooling",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "test:integration": "node scripts/with-env.mjs node scripts/integration.mjs",
+    "test:browser": "node scripts/browser.mjs",
+    "check:vectors": "node scripts/crypto-vectors.mjs --check"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "playwright": "1.63.0"
+  }
+}

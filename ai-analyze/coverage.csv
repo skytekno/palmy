@@ -1,0 +1,164 @@
+id,module,scenario,status,evidence_or_boundary,requirement
+NAV-01,Navigation,Home cards and in-scope menus,PASS,Opened every discovered in-scope top-level module; excluded entries untouched except one accidental navigation without actions.,FR-01
+NAV-02,Navigation,Global menu search,PASS,Wallet query found matching navigation and create action; synthetic record query showed no menu result and AI fallback.,FR-01
+NAV-03,Navigation,Notification inbox,PASS,New bookkeeping and event notifications visible.,FR-02
+NAV-04,Navigation,Weekly AI insight,PASS,Generated an insight from the current household data.,FR-02
+NAV-05,Navigation,Header refresh,INSPECTED,Control present; independent stale-cache recovery not verified.,FR-01
+NAV-06,Navigation,Amount privacy toggle,PASS,Masked values then restored values in reports and overview.,FR-02
+NAV-07,Navigation,Weather and home photo,INSPECTED,Weather rendered; location permission and photo replacement not executed.,FR-02
+NAV-08,Navigation,Empty and loading states,PASS,Observed loading followed by populated results; new module empty states displayed.,FR-01
+WAL-01,Wallets,Cash create and initial balance,PASS,PALMY QA R2 Cash created with opening balance 100000.,FR-03
+WAL-02,Wallets,Required name,PASS,Blank wallet name rejected.,FR-03
+WAL-03,Wallets,Transfer and fee,PASS,1000 transfer plus 50 fee: source fell 1050 and destination rose 1000.,FR-04
+WAL-04,Wallets,Same-wallet transfer guard,PASS,Source wallet omitted from destination choices.,FR-04
+WAL-05,Wallets,Transfer history and search,PASS,Synthetic transfer found with source and destination detail.,FR-04
+WAL-06,Wallets,Credit wallet creation,PASS,Limit 10000 and opening debt 2000 persisted.,FR-03
+WAL-07,Wallets,Credit repayment,PASS,Payment 500 from QA cash left credit outstanding 1500.,FR-04
+WAL-08,Wallets,Credit adjustment and overpayment,INSPECTED,Debt and CR opening/adjustment forms inspected; adjustment not committed.,FR-03
+WAL-09,Wallets,"Owner, wealth inclusion, allowed categories",INSPECTED,Controls and labels reviewed; all combinations not changed.,FR-03
+WAL-10,Wallets,"Edit, reorder and archive/delete",INSPECTED,Controls inspected; no deletion or reorder mutation executed.,FR-03
+WAL-11,Wallets,PIN-protected wallet reset,BLOCKED,Correct wallet named and empty PIN disabled final action; cancelled before destructive reset.,FR-21
+TX-01,Transactions,Required amount,PASS,Empty amount rejected.,FR-05
+TX-02,Transactions,Shared decimal expense,FAIL,"Input 1234.56 at 50/50 persisted as 618 and 617, totaling 1235; difference +0.44.",FR-05
+TX-03,Transactions,Edit description,PASS,One synthetic split row renamed and persisted.,FR-05
+TX-04,Transactions,Search,PASS,Synthetic records returned after debounce.,FR-06
+TX-05,Transactions,Person filter,PASS,Selected second member; final results contained only the 617 shared expense.,FR-06
+TX-06,Transactions,Amount sort control,INSPECTED,Descending amount selection applied with person filter; one result cannot prove ordering.,FR-06
+TX-07,Transactions,Date and category filters,PASS,Native date picker set26Sep to26Sep; R2 Budget filter returned only its100 expense; active range and two filters verified.,FR-06
+TX-08,Transactions,Pagination,PASS,Page 1 to page 2 and back verified.,FR-06
+TX-09,Transactions,Filter reset,PASS,Keyboard activated Reset then Apply; dates and category cleared and active filter count became0.,FR-06
+TX-10,Transactions,Multi-category expense,PASS,100 + 200 saved as two linked category rows totaling 300.,FR-05
+TX-11,Transactions,Multi-category required category,PASS,Missing category rejected before save.,FR-05
+TX-12,Transactions,Multi-category shared split restriction,PASS,UI explicitly disables All/shared-person split in multi-category mode.,FR-05
+TX-13,Transactions,AI income parse and review-save,PASS,Synthetic salary prompt parsed 3000; reviewed wallet and description; income persisted.,FR-07
+TX-14,Transactions,Manual income without AI,INSPECTED,Manual fields shared with reviewed income flow; independent manual-only submission not executed.,FR-05
+TX-15,Transactions,"Expense fees, need/want, merchant and time",INSPECTED,Fields inspected; transfer fee executed separately. Exhaustive field combinations not submitted.,FR-05
+TX-16,Transactions,Duplicate/copy and delete,INSPECTED,Copy/edit controls inspected; copy save and permanent deletion not executed.,FR-05
+TX-17,Transactions,Receipt scanning,BLOCKED,Receipt mode and review form inspected; browser file upload blocked.,FR-07
+TX-18,Transactions,Transfer-proof scanning,BLOCKED,Proof mode changed helper text; actual OCR blocked by file upload.,FR-07
+TX-19,Transactions,Batch receipt scanning,BLOCKED,Batch dialog opened and states maximum 10 photos; execution blocked by file upload.,FR-07
+TX-20,Transactions,Extremely large and duplicate submissions,NOT_RUN,No executed overflow/concurrent retry matrix; planned acceptance scenarios supplied.,FR-05
+TX-21,Transactions,Zero amount validation,PASS,Entering0 and saving rejected with localized required-amount message.,FR-05
+TX-22,Transactions,Negative input normalization,INSPECTED,Typing-1 changed visible amount to1; not submitted. Silent sign removal recorded as a usability observation.,FR-05
+BUD-01,Budgets,Category and subcategory creation,PASS,R2 Budget 5000 and R2 Sub 1000 persisted.,FR-08
+BUD-02,Budgets,Required category name,PASS,Blank name rejected.,FR-08
+BUD-03,Budgets,Due day,PASS,Day 28 saved.,FR-08
+BUD-04,Budgets,Invalid day 32,NOT_RUN,Attempt made but result not conclusively verified.,FR-08
+BUD-05,Budgets,Card/list view,PASS,Switched view; list preference retained.,FR-08
+BUD-06,Budgets,"Icons, colors, restrictions and need/want defaults",INSPECTED,Fields and choices inspected.,FR-08
+BUD-07,Budgets,Trend and category detail,PASS,Detail opened; new category empty six-month trend displayed.,FR-08
+BUD-08,Budgets,Inline transaction and ordering,INSPECTED,Controls identified; separate category transaction was created via multi-category entry.,FR-08
+BUD-09,Budgets,Reporting cycle,PASS,Day 25 preview and save verified; restored day 1 and verified.,FR-08
+DEB-01,Debts,Receivable creation,PASS,R2 Borrower 2000 lent from QA cash.,FR-09
+DEB-02,Debts,Overpayment validation,PASS,Payment 2001 rejected against 2000 outstanding.,FR-09
+DEB-03,Debts,Localized error text,FAIL,Overpayment error surfaced raw English: amount exceeds remaining balance.,FR-09
+DEB-04,Debts,Partial payment,PASS,500 receipt produced 1500 remaining and 25 percent collected.,FR-09
+DEB-05,Debts,Archive and history preservation,PASS,Archive success and original/payment history remained.,FR-09
+DEB-06,Debts,Restore,PASS,Activate again changed action back to Archive and retained 1500 balance.,FR-09
+DEB-07,Debts,Borrowed money and credit goods variants,INSPECTED,"Types, prior balance, interest, tenor and no-wallet option inspected; new payable not created in R2.",FR-09
+DEB-08,Debts,Reminder via WhatsApp,INSPECTED,Prepared-message explanation inspected; no phone submitted or message sent.,FR-09
+DEB-09,Debts,Permanent deletion,BLOCKED,Irreversible deletion not submitted.,FR-21
+GOA-01,Goals,Required goal type,PASS,Type selection required.,FR-10
+GOA-02,Goals,Goal creation,PASS,Emergency goal target 10000 created.,FR-10
+GOA-03,Goals,Reserve existing wallet funds,PASS,1500 contribution showed 15 percent progress.,FR-10
+GOA-04,Goals,Withdrawal,PASS,500 release left 1000 and 10 percent progress.,FR-10
+GOA-05,Goals,Goal notes,PASS,Synthetic note saved.,FR-10
+GOA-06,Goals,Link asset and aggregate,PASS,1500 holding linked; cash 1000 plus asset 1500 displayed 2500 and 25 percent.,FR-10
+GOA-07,Goals,Other contribution modes,INSPECTED,"New money, transfer, asset purchase and external saving options inspected.",FR-10
+GOA-08,Goals,"Deadline, default wallet and wealth inclusion",INSPECTED,Controls and on-track explanation inspected; education draft prefilled deadline.,FR-10
+AST-01,Assets,Purchase,PASS,"R2 other asset: 2 units at 1000, wallet purchase total 2000.",FR-11
+AST-02,Assets,Manual market value,PASS,1500 per unit yielded 3000 value and 1000 gain.,FR-11
+AST-03,Assets,Partial sale,PASS,Sold 1 at 1500; 1 unit remained valued at 1500 with cost 1000.,FR-11
+AST-04,Assets,Goal association,PASS,Holding linked and corresponding goal aggregate verified.,FR-11
+AST-05,Assets,Unit correction preview,PASS,1 to 1.5 preview preserved cost 1000 and changed average to about 667; cancelled.,FR-11
+AST-06,Assets,"Gold, silver and dinar forms",INSPECTED,Gram/coin units and auto-price controls inspected; purchases not committed.,FR-11
+AST-07,Assets,FX form,INSPECTED,"Currency selector, USD and quantity fields inspected.",FR-11
+AST-08,Assets,Stocks and ETF forms,INSPECTED,"Ticker, broker, USD toggle and unit/total price forms inspected.",FR-11
+AST-09,Assets,Crypto and bonds forms,INSPECTED,"Ticker/units, broker and pricing choices inspected.",FR-11
+AST-10,Assets,Deposit form,INSPECTED,"Principal, annual interest, tenor and generated maturity inspected.",FR-11
+AST-11,Assets,Mutual fund and property forms,INSPECTED,Unit/total purchase or manual unit-price fields inspected.,FR-11
+AST-12,Assets,Historical return insight,PASS,Insight opened with approximation methodology disclosed; accuracy versus external data not benchmarked.,FR-11
+AST-13,Assets,Allocation target validation,PASS,"110 clamped to100 on blur;50 showed disabled save. Draft cancelled, original target untouched.",FR-12
+AST-14,Assets,Bulk repricing and rebalance,INSPECTED,Controls identified; mutations not committed.,FR-11
+AST-15,Assets,"Automatic price provider, dividend and maturity execution",NOT_RUN,"Provider freshness, outage fallback and scheduled maturity not executed.",FR-11
+AST-16,Assets,Compact and card views,PASS,Ringkas changed layout; Kartu restored. Position values remained unchanged.,FR-11
+ALL-01,Allocation,Percentage overrun,PASS,Income 10000 with 110 percent allocation showed 1000 overrun and disabled save.,FR-12
+ALL-02,Allocation,Restore balanced draft,PASS,Restored 50/10/20/20 percentages without persisting.,FR-12
+ALL-03,Allocation,Save plan and apply budgets,INSPECTED,Budget mapping and apply actions inspected; not committed against existing category plan.,FR-12
+REC-01,Recurring,Create monthly template,PASS,R2 expense 250 on day 28 in QA wallet created.,FR-13
+REC-02,Recurring,Record occurrence,PASS,Review/save posted 250 and recorded count became 1.,FR-13
+REC-03,Recurring,Yearly and linked resource templates,INSPECTED,Yearly schedule and debt/asset/goal links inspected.,FR-13
+REC-04,Recurring,Automatic execution,NOT_RUN,Feature request exists; current product requires manual record/review. Proposed future option only.,FR-13
+REP-01,Reports,"Cashflow, wealth and detail views",PASS,All report tabs opened with data.,FR-14
+REP-02,Reports,Period selection,PASS,"Day, week, month and year; previous-week state verified.",FR-14
+REP-03,Reports,Mask and reveal,PASS,Values masked then restored.,FR-14
+REP-04,Reports,Excel export,PASS,Downloaded workbook confirmed on disk with Laporan sheet and valid OOXML.,FR-14
+REP-05,Reports,Print,INSPECTED,Print control discovered; system print preview/output not executed.,FR-14
+REP-06,Reports,Full accounting reconciliation,NOT_RUN,Synthetic transfer and goal arithmetic checked; entire existing household ledger not reconciled.,FR-14
+CALC-01,Calculators,Zero-interest loan,PASS,1200000 over 12 months returned 100000/month and 1200000 total.,FR-15
+CALC-02,Calculators,Tiered rates and extra payment,INSPECTED,Add-stage and extra-payment fields inspected; full amortization not independently reconciled.,FR-15
+CALC-03,Calculators,Loan takeover,PASS,1200000/12 months old10 new5 penalty1 returned 1265990 vs1244747 and saving21243.,FR-15
+CALC-04,Calculators,Save scenario,INSPECTED,Save UI discovered; no scenario persisted.,FR-15
+CALC-05,Calculators,Education inflation,PASS,1000000 compounded 10 percent for 2 years returned 1210000.,FR-15
+CALC-06,Calculators,Create goal from education result,PASS,Draft education goal populated date 2028-09-26 and estimate; cancelled before save.,FR-15
+GRO-01,Groceries,Create section and item,PASS,R2 section and Milk quantity2 price1000 created.,FR-16
+GRO-02,Groceries,Select and checkout,PASS,Item selected; checkout2000 posted to financial history.,FR-16
+GRO-03,Groceries,Checkout wallet,FAIL,"No wallet picker; synthetic checkout posted to primary wallet. Product gap, not a claim against a written requirement.",FR-16
+GRO-04,Groceries,Purchase history,PASS,History showed one item and total2000.,FR-16
+GRO-05,Groceries,Recurring need,PASS,Rice routine7days price1000 created.,FR-16
+GRO-06,Groceries,Price-history analysis and reorder,INSPECTED,Feature surfaces identified; deeper history/reorder mutation not exercised.,FR-16
+GRO-07,Groceries,Receipt item extraction/import,BLOCKED,File access blocked.,FR-16
+CAL-01,Calendar,"Month, week and day navigation",PASS,All views opened; event visible on matching day.,FR-17
+CAL-02,Calendar,Create event and assignee,PASS,R2 Event at 23:50 on 2026-09-26 with synthetic assignee saved.,FR-17
+CAL-03,Calendar,Create checklist category and item,PASS,R2 Tasks category and undated Checklist item created.,FR-17
+CAL-04,Calendar,Complete and undo checklist,PASS,Counter0/1 to1/1 then0/1 verified; strike-through on completion.,FR-17
+CAL-05,Calendar,"Time window, recurrence and reminders",INSPECTED,"Range, weekly/monthly/yearly recurrence and reminder options inspected; future dispatch not verified.",FR-17
+CAL-06,Calendar,"Category colors, order and event edit/delete",INSPECTED,Controls identified; not all mutations committed.,FR-17
+CAL-07,Calendar,Calendar feed,INSPECTED,Existing active secret feed masked; no token copied or rotated.,FR-17
+CAL-08,Calendar,Calendar import,BLOCKED,Upload execution unavailable.,FR-17
+MAI-01,Maintenance,Vehicle creation,PASS,R2 Bicycle created.,FR-18
+MAI-02,Maintenance,Vehicle service and expense,PASS,Chain service1000 saved; corresponding Transportasi expense visible.,FR-18
+MAI-03,Maintenance,Home equipment schedule,PASS,R2 Air Filter created with30-day interval.,FR-18
+MAI-04,Maintenance,Electronic device,PASS,R2 Device created without interval.,FR-18
+MAI-05,Maintenance,Home/electronic repair history entry,INSPECTED,Forms inspected; separate service submissions not executed.,FR-18
+MAI-06,Maintenance,Service wallet selection,FAIL,No wallet picker; service expense used primary wallet. Product gap.,FR-18
+MAI-07,Maintenance,"Reminder dispatch, media and deletion",BLOCKED,Future reminders not waited for; media blocked; destructive final action not executed.,FR-18
+LNK-01,Links,Required name,PASS,Blank name rejected.,FR-19
+LNK-02,Links,Create and edit link,PASS,Synthetic label saved; edited to https://example.com.,FR-19
+LNK-03,Links,URL normalization,PASS,Single-label not-a-url auto-prefixed https; this alone is not evidence of an invalid URI bug.,FR-19
+LNK-04,Links,PIN lock lifecycle,NOT_RUN,Link screen accessible after interruption; PIN entry/expiry/bypass not tested.,FR-19
+PRO-01,Profile,Required member name,PASS,Blank member name rejected.,FR-20
+PRO-02,Profile,Account fields and household roles,INSPECTED,Profile labels and invitation text inspected; second account unavailable.,FR-20
+PRO-03,Profile,Invite partner and role authorization,BLOCKED,No external invitation/access grant sent; independent second-user session unavailable.,FR-20
+PRO-04,Profile,Weather location/photo,BLOCKED,No new geolocation permission; photo upload blocked.,FR-20
+PRO-05,Profile,Sign-in sign-out registration and recovery,BLOCKED,Authenticated session retained; no disposable identity or credentials supplied for account lifecycle testing.,FR-20
+SET-01,Settings,Currency display change and restore,PASS,USD auto-save verified; restored IDR.,FR-21
+SET-02,Settings,Monthly cycle change and restore,PASS,Day25 saved then day1 restored.,FR-21
+SET-03,Settings,Shared split ratio,INSPECTED,50/50 existing ratio retained.,FR-21
+SET-04,Settings,Password and PIN forms,INSPECTED,Empty required inputs disabled save; no credentials entered or changed.,FR-21
+SET-05,Settings,Notification permissions and PWA install,INSPECTED,Controls identified; no new browser grants or install completed.,FR-21
+SET-06,Settings,Google Sheets integration,BLOCKED,Disconnected state inspected; no OAuth scope granted.,FR-22
+SET-07,Settings,Account deletion,BLOCKED,Password plus HAPUS guard inspected; final action not submitted.,FR-21
+IO-01,Import-export,Selective backup,PASS,Excluded three groups; export contains exactly seven in-scope workbook sheets.,FR-22
+IO-02,Import-export,Transaction template,PASS,Downloaded template structure read and valid OOXML confirmed.,FR-22
+IO-03,Import-export,Valid and invalid import,BLOCKED,321.09 and -1 synthetic XLSX prepared; chooser upload returned Not allowed.,FR-22
+IO-04,Import-export,"Import mapping, duplicates, rollback",BLOCKED,Cannot reach preview without file upload.,FR-22
+AFF-01,Affiliate,Dashboard and referral link,PASS,"Active account, referral code and zero commission state rendered.",FR-23
+AFF-02,Affiliate,Withdrawal minimum and history,INSPECTED,Minimum50000 and empty history seen; no payout requested.,FR-23
+AFF-03,Affiliate,Bank details and promotion submission,INSPECTED,Forms inspected; no payment details or public promotional submission sent.,FR-23
+FDB-01,Feedback,"Statuses, topic and personal list",PASS,Queue/in-progress/released and empty personal list inspected.,FR-24
+FDB-02,Feedback,Required topic validation,PASS,Blank request rejected for missing topic.,FR-24
+FDB-03,Feedback,Public post and voting,INSPECTED,Controls identified; no public post or vote made.,FR-24
+HELP-01,Help,FAQ expansion,PASS,Twelve FAQ topics expanded and read.,FR-24
+HELP-02,Help,Security/currency/role documentation consistency,FAIL,PIN and currency explanations conflict with settings; child-access claim conflicts with discoverable UI/backlog.,FR-24
+HELP-03,Help,"About, contact, terms and privacy",INSPECTED,Links and company information inspected; contact not sent; legal content not fully audited.,FR-24
+NFR-01,Cross-cutting,Responsive Home width,PASS,"320,768,1024,1440,1920 widths had no root horizontal overflow; viewport restored.",NFR-01
+NFR-02,Cross-cutting,Touch targets,PASS,Bottom navigation57x48 at320 width and78x48 at wider tested layouts.,NFR-01
+NFR-03,Cross-cutting,Accessible action labels,FAIL,Several actionable icons/checklists unnamed; sortable cards exposed disabled despite usable pointer actions.,NFR-01
+NFR-04,Cross-cutting,Console diagnostics,PASS,Retained warn/error buffer empty; limited observation window only.,NFR-03
+NFR-05,Cross-cutting,Network diagnostics,PASS,"Retained response window had no HTTP>=400/loading failures; event log truncated, not full-session proof.",NFR-03
+NFR-06,Cross-cutting,"Cross-browser, offline, keyboard and screen reader",NOT_RUN,Only attached Chrome tested; no full offline or assistive-tech matrix.,NFR-01
+NFR-07,Cross-cutting,"Concurrency, isolation, rate limits and fault injection",BLOCKED,No source/staging/second tenant/test backend available; no production load or security attack executed.,NFR-02
+X-01,Excluded,Berdua menu and descendants,EXCLUDED,Explicit user exclusion. Incidental navigation immediately abandoned; no workflow tested.,OUT
+X-02,Excluded,Conversation Cards,EXCLUDED,Explicit user exclusion.,OUT
+X-03,Excluded,Jurnal Keluarga,EXCLUDED,Explicit user exclusion.,OUT

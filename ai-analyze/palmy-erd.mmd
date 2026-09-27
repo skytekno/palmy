@@ -1,0 +1,563 @@
+erDiagram
+  users {
+    uuid id PK
+    text auth_subject
+    text display_name
+    text locale
+  }
+  households {
+    uuid id PK
+    text name
+    text timezone
+    char base_currency
+  }
+  memberships {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text role
+    text status
+  }
+  households ||--o{ memberships : scopes
+  users ||--o{ memberships : "user_id"
+  invitations {
+    uuid id PK
+    uuid household_id FK
+    bytea email_ciphertext
+    text token_digest
+    timestamptz expires_at
+  }
+  households ||--o{ invitations : scopes
+  users |o--o{ invitations : "accepted_by"
+  users ||--o{ invitations : "invited_by"
+  household_settings {
+    uuid id PK
+    uuid household_id FK
+    smallint cycle_start_day
+    char display_currency
+    rate display_rate
+  }
+  households ||--o| household_settings : scopes
+  files |o--o{ household_settings : "photo_file_id"
+  ledger_accounts {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text kind
+    text system_code
+  }
+  households ||--o{ ledger_accounts : scopes
+  wallets {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text kind
+    text icon
+  }
+  households ||--o{ wallets : scopes
+  ledger_accounts ||--o| wallets : "account_id"
+  memberships |o--o{ wallets : "owner_member_id"
+  categories {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text direction
+    text icon
+  }
+  households ||--o{ categories : scopes
+  categories |o--o{ categories : "parent_id"
+  ledger_accounts ||--o{ categories : "account_id"
+  wallet_category_rules {
+    uuid id PK
+    uuid household_id FK
+  }
+  households ||--o{ wallet_category_rules : scopes
+  wallets ||--o{ wallet_category_rules : "wallet_id"
+  categories ||--o{ wallet_category_rules : "category_id"
+  budget_periods {
+    uuid id PK
+    uuid household_id FK
+    date starts_on
+    date ends_on
+  }
+  households ||--o{ budget_periods : scopes
+  budget_limits {
+    uuid id PK
+    uuid household_id FK
+    money amount
+  }
+  households ||--o{ budget_limits : scopes
+  budget_periods ||--o{ budget_limits : "period_id"
+  categories ||--o{ budget_limits : "category_id"
+  merchants {
+    uuid id PK
+    uuid household_id FK
+    text name
+  }
+  households ||--o{ merchants : scopes
+  journal_entries {
+    uuid id PK
+    uuid household_id FK
+    text kind
+    text state
+    date effective_on
+  }
+  households ||--o{ journal_entries : scopes
+  wallets |o--o{ journal_entries : "wallet_id"
+  wallets |o--o{ journal_entries : "destination_wallet_id"
+  merchants |o--o{ journal_entries : "merchant_id"
+  journal_entries |o--o| journal_entries : "reverses_entry_id"
+  users ||--o{ journal_entries : "created_by"
+  journal_lines {
+    uuid id PK
+    uuid household_id FK
+    money amount
+    text memo
+  }
+  households ||--o{ journal_lines : scopes
+  journal_entries ||--o{ journal_lines : "entry_id"
+  ledger_accounts ||--o{ journal_lines : "account_id"
+  entry_allocations {
+    uuid id PK
+    uuid household_id FK
+    money amount
+    text need
+    boolean counts_in_budget
+  }
+  households ||--o{ entry_allocations : scopes
+  journal_entries ||--o{ entry_allocations : "entry_id"
+  categories ||--o{ entry_allocations : "category_id"
+  memberships |o--o{ entry_allocations : "member_id"
+  debts {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text direction
+    text origin
+  }
+  households ||--o{ debts : scopes
+  ledger_accounts ||--o{ debts : "account_id"
+  journal_entries |o--o{ debts : "origin_entry_id"
+  memberships |o--o{ debts : "member_id"
+  debt_payments {
+    uuid id PK
+    uuid household_id FK
+    money principal
+    money interest
+    money fee
+  }
+  households ||--o{ debt_payments : scopes
+  debts ||--o{ debt_payments : "debt_id"
+  journal_entries ||--o| debt_payments : "entry_id"
+  debt_payments |o--o| debt_payments : "reverses_payment_id"
+  goals {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text type
+    money target_amount
+  }
+  households ||--o{ goals : scopes
+  wallets |o--o{ goals : "default_wallet_id"
+  goal_movements {
+    uuid id PK
+    uuid household_id FK
+    money amount
+    text kind
+    date effective_on
+  }
+  households ||--o{ goal_movements : scopes
+  goals ||--o{ goal_movements : "goal_id"
+  wallets ||--o{ goal_movements : "wallet_id"
+  journal_entries |o--o{ goal_movements : "entry_id"
+  asset_holdings {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text asset_class
+    text symbol
+  }
+  households ||--o{ asset_holdings : scopes
+  ledger_accounts ||--o| asset_holdings : "account_id"
+  asset_trades {
+    uuid id PK
+    uuid household_id FK
+    text kind
+    quantity quantity_delta
+    money unit_price
+  }
+  households ||--o{ asset_trades : scopes
+  asset_holdings ||--o{ asset_trades : "holding_id"
+  journal_entries |o--o{ asset_trades : "entry_id"
+  asset_trades |o--o| asset_trades : "reverses_trade_id"
+  asset_quotes {
+    uuid id PK
+    uuid household_id FK
+    money unit_price
+    char currency
+    rate base_conversion_rate
+  }
+  households ||--o{ asset_quotes : scopes
+  asset_holdings ||--o{ asset_quotes : "holding_id"
+  goal_asset_links {
+    uuid id PK
+    uuid household_id FK
+  }
+  households ||--o{ goal_asset_links : scopes
+  goals ||--o{ goal_asset_links : "goal_id"
+  asset_holdings ||--o| goal_asset_links : "holding_id"
+  allocation_plans {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text kind
+    money income_amount
+  }
+  households ||--o{ allocation_plans : scopes
+  allocation_items {
+    uuid id PK
+    uuid household_id FK
+    text name
+    integer basis_points
+    text asset_class
+  }
+  households ||--o{ allocation_items : scopes
+  allocation_plans ||--o{ allocation_items : "plan_id"
+  categories |o--o{ allocation_items : "category_id"
+  goals |o--o{ allocation_items : "goal_id"
+  recurring_templates {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text frequency
+    smallint day_of_month
+  }
+  households ||--o{ recurring_templates : scopes
+  wallets ||--o{ recurring_templates : "wallet_id"
+  categories |o--o{ recurring_templates : "category_id"
+  memberships |o--o{ recurring_templates : "member_id"
+  debts |o--o{ recurring_templates : "debt_id"
+  goals |o--o{ recurring_templates : "goal_id"
+  asset_holdings |o--o{ recurring_templates : "holding_id"
+  recurring_occurrences {
+    uuid id PK
+    uuid household_id FK
+    date due_on
+  }
+  households ||--o{ recurring_occurrences : scopes
+  recurring_templates ||--o{ recurring_occurrences : "template_id"
+  journal_entries ||--o{ recurring_occurrences : "entry_id"
+  shopping_sections {
+    uuid id PK
+    uuid household_id FK
+    text name
+    integer sort_order
+    timestamptz archived_at
+  }
+  households ||--o{ shopping_sections : scopes
+  shopping_items {
+    uuid id PK
+    uuid household_id FK
+    text name
+    quantity quantity
+    text unit
+  }
+  households ||--o{ shopping_items : scopes
+  shopping_sections ||--o{ shopping_items : "section_id"
+  shopping_purchases {
+    uuid id PK
+    uuid household_id FK
+    date purchased_on
+    money total
+    boolean record_only
+  }
+  households ||--o{ shopping_purchases : scopes
+  journal_entries |o--o{ shopping_purchases : "entry_id"
+  merchants |o--o{ shopping_purchases : "merchant_id"
+  shopping_purchases |o--o| shopping_purchases : "replaces_purchase_id"
+  shopping_purchase_items {
+    uuid id PK
+    uuid household_id FK
+    text name
+    quantity quantity
+    money unit_price
+  }
+  households ||--o{ shopping_purchase_items : scopes
+  shopping_purchases ||--o{ shopping_purchase_items : "purchase_id"
+  shopping_items |o--o{ shopping_purchase_items : "shopping_item_id"
+  shopping_routines {
+    uuid id PK
+    uuid household_id FK
+    text name
+    integer interval_days
+    quantity quantity
+  }
+  households ||--o{ shopping_routines : scopes
+  shopping_sections |o--o{ shopping_routines : "section_id"
+  calendar_categories {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text kind
+    text color
+  }
+  households ||--o{ calendar_categories : scopes
+  calendar_items {
+    uuid id PK
+    uuid household_id FK
+    text title
+    text kind
+    date starts_on
+  }
+  households ||--o{ calendar_items : scopes
+  calendar_categories ||--o{ calendar_items : "category_id"
+  memberships |o--o{ calendar_items : "assignee_member_id"
+  calendar_exceptions {
+    uuid id PK
+    uuid household_id FK
+    date occurrence_on
+    date override_on
+    boolean cancelled
+  }
+  households ||--o{ calendar_exceptions : scopes
+  calendar_items ||--o{ calendar_exceptions : "item_id"
+  calendar_reminders {
+    uuid id PK
+    uuid household_id FK
+    integer offset_minutes
+    text channel
+  }
+  households ||--o{ calendar_reminders : scopes
+  calendar_items ||--o{ calendar_reminders : "item_id"
+  calendar_feeds {
+    uuid id PK
+    uuid household_id FK
+    text token_digest
+    timestamptz revoked_at
+    timestamptz last_used_at
+  }
+  households ||--o{ calendar_feeds : scopes
+  users ||--o{ calendar_feeds : "created_by"
+  maintenance_items {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text kind
+    text subtype
+  }
+  households ||--o{ maintenance_items : scopes
+  calendar_items |o--o{ maintenance_items : "calendar_item_id"
+  service_records {
+    uuid id PK
+    uuid household_id FK
+    text description
+    date serviced_on
+    money cost
+  }
+  households ||--o{ service_records : scopes
+  maintenance_items ||--o{ service_records : "maintenance_item_id"
+  journal_entries |o--o{ service_records : "entry_id"
+  service_records |o--o| service_records : "replaces_service_id"
+  important_links {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text url
+    integer sort_order
+  }
+  households ||--o{ important_links : scopes
+  calculator_scenarios {
+    uuid id PK
+    uuid household_id FK
+    text name
+    text type
+    text formula_version
+  }
+  households ||--o{ calculator_scenarios : scopes
+  files {
+    uuid id PK
+    uuid household_id FK
+    text storage_key
+    text mime_type
+    bigint byte_size
+  }
+  households ||--o{ files : scopes
+  users ||--o{ files : "uploaded_by"
+  file_links {
+    uuid id PK
+    uuid household_id FK
+  }
+  households ||--o{ file_links : scopes
+  files ||--o{ file_links : "file_id"
+  journal_entries |o--o{ file_links : "entry_id"
+  service_records |o--o{ file_links : "service_id"
+  asset_trades |o--o{ file_links : "asset_trade_id"
+  calendar_items |o--o{ file_links : "calendar_item_id"
+  jobs {
+    uuid id PK
+    uuid household_id FK
+    text kind
+    text state
+    uuid requested_by
+  }
+  households ||--o{ jobs : scopes
+  files |o--o{ jobs : "input_file_id"
+  files |o--o{ jobs : "output_file_id"
+  users ||--o{ jobs : "requested_by"
+  import_rows {
+    uuid id PK
+    uuid household_id FK
+    integer row_number
+    text source_fingerprint
+    jsonb normalized_data
+  }
+  households ||--o{ import_rows : scopes
+  jobs ||--o{ import_rows : "job_id"
+  journal_entries |o--o{ import_rows : "entry_id"
+  integrations {
+    uuid id PK
+    uuid household_id FK
+    text provider
+    text state
+    text[] scopes
+  }
+  households ||--o{ integrations : scopes
+  users ||--o{ integrations : "connected_by"
+  pin_credentials {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text argon2id_verifier
+    integer failed_attempts
+  }
+  households ||--o{ pin_credentials : scopes
+  users ||--o{ pin_credentials : "user_id"
+  step_up_grants {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text token_digest
+    text scope
+  }
+  households ||--o{ step_up_grants : scopes
+  users ||--o{ step_up_grants : "user_id"
+  destructive_plans {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text scope
+    uuid target_id
+  }
+  households ||--o{ destructive_plans : scopes
+  users ||--o{ destructive_plans : "user_id"
+  device_subscriptions {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text endpoint_digest
+    bytea endpoint_ciphertext
+  }
+  households ||--o{ device_subscriptions : scopes
+  users ||--o{ device_subscriptions : "user_id"
+  notifications {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text type
+    text title
+  }
+  households ||--o{ notifications : scopes
+  users ||--o{ notifications : "user_id"
+  affiliate_accounts {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text referral_code
+    text status
+  }
+  households ||--o{ affiliate_accounts : scopes
+  users ||--o| affiliate_accounts : "user_id"
+  affiliate_commissions {
+    uuid id PK
+    uuid household_id FK
+    text source_event_id
+    money amount
+    timestamptz eligible_at
+  }
+  households ||--o{ affiliate_commissions : scopes
+  affiliate_accounts ||--o{ affiliate_commissions : "affiliate_id"
+  payout_destinations {
+    uuid id PK
+    uuid household_id FK
+    text bank_code
+    bytea account_ciphertext
+    char account_last4
+  }
+  households ||--o{ payout_destinations : scopes
+  affiliate_accounts ||--o{ payout_destinations : "affiliate_id"
+  payout_requests {
+    uuid id PK
+    uuid household_id FK
+    money amount
+    text state
+    text provider_reference
+  }
+  households ||--o{ payout_requests : scopes
+  affiliate_accounts ||--o{ payout_requests : "affiliate_id"
+  payout_destinations ||--o{ payout_requests : "destination_id"
+  promotion_submissions {
+    uuid id PK
+    uuid household_id FK
+    text url
+    text state
+  }
+  households ||--o{ promotion_submissions : scopes
+  affiliate_accounts ||--o{ promotion_submissions : "affiliate_id"
+  feedback_posts {
+    uuid id PK
+    uuid household_id FK
+    uuid author_id
+    text topic
+    text title
+  }
+  households ||--o{ feedback_posts : scopes
+  users ||--o{ feedback_posts : "author_id"
+  feedback_votes {
+    uuid id PK
+    uuid user_id
+    uuid post_id
+  }
+  users ||--o{ feedback_votes : "user_id"
+  feedback_posts ||--o{ feedback_votes : "post_id"
+  help_articles {
+    uuid id PK
+    text slug
+    text locale
+    text title
+  }
+  idempotency_keys {
+    uuid id PK
+    uuid household_id FK
+    uuid user_id
+    text route
+    text key
+  }
+  households ||--o{ idempotency_keys : scopes
+  users ||--o{ idempotency_keys : "user_id"
+  audit_events {
+    uuid id PK
+    uuid household_id FK
+    uuid actor_id
+    text action
+    text resource_type
+  }
+  households ||--o{ audit_events : scopes
+  users |o--o{ audit_events : "actor_id"
+  outbox_events {
+    uuid id PK
+    uuid household_id FK
+    text event_type
+    uuid aggregate_id
+    text dedupe_key
+  }
+  households ||--o{ outbox_events : scopes
